@@ -1,0 +1,29 @@
+/* 전체 페이지 배경색 */
+body {
+    background-color: #fff; /* 밝은 배경색 */
+    color: #333; /* 텍스트 색상 */
+    font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+}
+
+/* 예약 폼 스타일 */
+#reservationForm {
+    max-width: 500px; /* 폼의 최대 너비 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 20px;
+    background-color: #fff; /* 밝은 배경색 */
+    border-radius: 10px; /* 모서리를 둥글게 만듦 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+
+/* 입력 필드 스타일 */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f2f2f2; /* 입력 필드 밝은 배경색 */
+    color: #333; /* 입력 텍스트 색상 */
+}
+
