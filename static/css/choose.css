@@ -52,21 +52,21 @@ body {
   width: 1px;
 }
 .checkbox-input:checked + .checkbox-tile {
-  border-color: #2260ff;
+  border-color: #80bdff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  color: #2260ff;
+  color: #80bdff
 }
 .checkbox-input:checked + .checkbox-tile:before {
   transform: scale(1);
   opacity: 1;
-  background-color: #2260ff;
-  border-color: #2260ff;
+  background-color: #80bdff;
+  border-color: #80bdff;
 }
 .checkbox-input:checked + .checkbox-tile .checkbox-icon, .checkbox-input:checked + .checkbox-tile .checkbox-label {
-  color: #2260ff;
+  color: #80bdff;
 }
 .checkbox-input:focus + .checkbox-tile {
-  border-color: #2260ff;
+  border-color: #80bdff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
 }
 .checkbox-input:focus + .checkbox-tile:before {
@@ -129,4 +129,29 @@ body {
   color: #707070;
   transition: 0.375s ease;
   text-align: center;
+}
+.button {
+  background-color: transparent; /* 버튼 배경색 */
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid #7499d9; /* 테두리 설정 */
+  border-radius: 5px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #80bdff;
+}
+
+.button:focus {
+  outline: none;
+  border-color: #80bdff;
+}
+
+.button:active {
+  transform: translateY(1px);
 }

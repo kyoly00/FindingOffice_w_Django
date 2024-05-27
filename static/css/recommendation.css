@@ -1,0 +1,45 @@
+/* 네 번째 CSS 파일 수정 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px; /* 수정: 테두리 둥글게 */
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px; /* 수정: 패딩 크기 줄임 */
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+th {
+    background-color: #333; /* 수정: 배경색 변경 */
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+}
+
+.submit-button {
+    display: inline-block; /* 수정: 인라인 블록으로 변경 */
+    padding: 12px 24px; /* 수정: 좌우 패딩 크기 조정 */
+    background-color: #80bdff; /* 수정: 버튼 색상 변경 */
+    color: white;
+    border: 1px solid #7499d9; /* 테두리 설정 */
+    border-radius: 5px; /* 수정: 버튼 모서리 둥글게 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.submit-button:hover {
+    background-color: #80bdff; /* 수정: 호버 시 색상 변경 */
+}

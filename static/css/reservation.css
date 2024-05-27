@@ -1,29 +1,36 @@
-/* 전체 페이지 배경색 */
+/* 세 번째 CSS 파일 수정 */
 body {
-    background-color: #fff; /* 밝은 배경색 */
-    color: #333; /* 텍스트 색상 */
-    font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+    background-color: #f9f9f9; /* 수정: 밝은 배경색 변경 */
+    color: #333; /* 수정: 텍스트 색상 변경 */
+    font-family: Arial, sans-serif; /* 수정: 기본 폰트 설정 */
 }
 
-/* 예약 폼 스타일 */
 #reservationForm {
-    max-width: 500px; /* 폼의 최대 너비 */
-    margin: 0 auto; /* 가운데 정렬 */
+    max-width: 750px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #fff; /* 밝은 배경색 */
-    border-radius: 10px; /* 모서리를 둥글게 만듦 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 입력 필드 스타일 */
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+.form-group {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
+}
+
+.address-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.address-group input {
+    width: calc(50% - 5px);
+    padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #f2f2f2; /* 입력 필드 밝은 배경색 */
-    color: #333; /* 입력 텍스트 색상 */
+    background-color: #f2f2f2;
+    color: #333;
 }
-
