@@ -6,7 +6,7 @@ def index(request):
     return render(request, 'index.html')
 
 def alone(request):
-    return render(request, 'reserve_page.html')
+    return render(request, 'reservation.html')
 
 def together(request):
     return render(request, 'reservation.html')

@@ -138,7 +138,7 @@ body {
   text-align: center;
   border: 1px solid #7499d9; /* 테두리 설정 */
   border-radius: 5px;
-  color: #fff;
+  color: #6c757d;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
