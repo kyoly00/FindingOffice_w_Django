@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Table</title>
+    <link rel="stylesheet" href="{% static 'css/recommendation.css' %}"/>
+</head>
+<body>
+    <form action="{% url 'enterinfo' %}" method="post">
+        {% csrf_token %}
+        <table class = 'table-striped'>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="selected" value="John Doe, 30"></td>
+                    <td>John Doe</td>
+                    <td>30</td>
+                    <td>USA</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="selected" value="Jane Smith, 25"></td>
+                    <td>Jane Smith</td>
+                    <td>25</td>
+                    <td>UK</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="selected" value="Alice Johnson, 35"></td>
+                    <td>Alice Johnson</td>
+                    <td>35</td>
+                    <td>Canada</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+</body>
+</html>

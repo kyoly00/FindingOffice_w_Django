@@ -7,4 +7,8 @@ urlpatterns = [
     path('together/', views.together, name='together'),
     path('login/', views.login, name='login'),
     path('mypage/', views.mypage, name='mypage'),
+    path('location/', views.location_view, name='location'),
+    path('choose/', views.choose, name='choose'),
+    path('recommendation/', views.recommendation, name='recommendation'),
+    path('enterinfo/', views.enterinfo, name='enterinfo'),
 ]
