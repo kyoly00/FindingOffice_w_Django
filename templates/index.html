@@ -25,12 +25,12 @@
 								<div class="inner">
 
 									<!-- Logo -->
-										<h1><a href="#" id="logo">FindingOffice</a></h1>
+										<h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
 
 									<!-- Nav -->
 										<nav id="nav">
 											<ul>
-												<li class="current_page_item"><a href="#">Home</a></li>
+												<li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
 												<li>
 													<a href="#">Reservation</a>
 													<ul>
@@ -38,7 +38,7 @@
 														<li><a href="{% url 'together' %}">With Colleagues</a></li>
 													</ul>
 												</li>
-												<li><a href="#ranking">Ranking</a></li>
+												<li><a href="{% url 'index' %}#ranking">Ranking</a></li>
 												<li><a href="{% url 'mypage' %}">My Page</a></li>
 												<li><a href="{% url 'login' %}">Login & Register</a></li>
 											</ul>
@@ -75,7 +75,11 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-												<a href="#" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
+                                                {% if user.is_authenticated %}
+                                                    <a href="{% url 'together' %}" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
+                                                {% else %}
+                                                    <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
+                                                {% endif %}
 												<header class="second icon solid fa-calendar-check">
 													<h3>Here's a Heading</h3>
 													<p>And a subtitle</p>
@@ -84,8 +88,12 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-												<a href="#" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
-												<header class="second icon solid fa-search-location">
+												{% if user.is_authenticated %}
+                                                    <a href="{% url 'alone' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
+                                                {% else %}
+                                                    <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
+                                                {% endif %}
+                                                <header class="second icon solid fa-search-location">
 													<h3>Also a Heading</h3>
 													<p>And another subtitle</p>
 												</header>
@@ -93,8 +101,12 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-												<a href="#" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
-												<header class="second icon solid fa-user">
+												{% if user.is_authenticated %}
+                                                    <a href="{% url 'mypage' %}" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
+                                                {% else %}
+                                                    <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
+                                                {% endif %}
+                                                <header class="second icon solid fa-user">
 													<h3>Another Heading</h3>
 													<p>And yes, a subtitle</p>
 												</header>

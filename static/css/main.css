@@ -1861,6 +1861,29 @@ input, select, textarea {
 		font-size: 1.5em;
 	}
 
+		#sidebar a {
+		text-decoration: none;
+	}
+
+	.mypage-sidebar h3{
+		font-size: 1.5em;
+	}
+
+	.submenu {
+		list-style: none;
+		padding-left: 20px; /* 서브메뉴 항목을 들여쓰기 함 */
+		margin: 5px 0; /* 서브메뉴와 메인 메뉴 항목 사이의 간격 */
+	  }
+
+	  /* 서브메뉴를 항상 표시 */
+	.menu-item > .submenu {
+		display: block;
+	}
+
+	.form-group.action-buttons {
+		margin-top: 30px;
+	}
+
 /* Wrappers */
 
 	#header-wrapper {
@@ -1875,15 +1898,12 @@ input, select, textarea {
 	}
 
 	#footer-wrapper {
-		background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url("images/bg03.png"), url("images/bg02.png");
-		background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url("images/bg03.png"), url("images/bg02.png");
-		background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url("images/bg03.png"), url("images/bg02.png");
-		background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url("images/bg03.png"), url("images/bg02.png");
 		position: relative;
 		background-repeat: repeat-x, no-repeat, repeat;
 		background-size: 100% 100%, 100% 15em, auto auto;
 		background-position: top left, top center, top left;
 		padding: 7em 0 7em 0;
+		background: #3B3E45;
 	}
 
 	.wrapper {
