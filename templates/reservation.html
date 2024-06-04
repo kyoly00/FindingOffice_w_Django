@@ -16,30 +16,33 @@
 
 						<!-- Header -->
 							<header id="header">
-								<div class="inner">
+                                <div class="inner">
+                                    <!-- Logo -->
+                                    <h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
 
-									<!-- Logo -->
-										<h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
+                                    <!-- Nav -->
+                                    <nav id="nav">
+                                        <ul>
+                                            <li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
+                                            <li>
+                                                <a href="#">Reservation</a>
+                                                <ul>
+                                                    <li><a href="{% url 'alone' %}">Alone</a></li>
+                                                    <li><a href="{% url 'together' %}">With Colleagues</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
+                                            <li><a href="{% url 'mypage' %}">My Page</a></li>
+                                             <li><a href="{% url 'login' %}">Login & Register</a></li>
+                                            <!-- 로그인 상태에 따라 링크 변경 -->
+                                            {% if request.session.customer_id %}
+                                                <li><a href="{% url 'logout' %}">Log out</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </header>
 
-									<!-- Nav -->
-										<nav id="nav">
-											<ul>
-												<li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
-												<li>
-													<a href="#">Reservation</a>
-													<ul>
-														<li><a href="{% url 'alone' %}">Alone</a></li>
-														<li><a href="{% url 'together' %}">With Colleagues</a></li>
-													</ul>
-												</li>
-												<li><a href="{% url 'index' %}#ranking">Ranking</a></li>
-												<li><a href="{% url 'mypage' %}">My Page</a></li>
-												<li><a href="{% url 'login' %}">Login & Register</a></li>
-											</ul>
-										</nav>
-
-								</div>
-							</header>
 
                             <div id="banner">
                                 <h2><strong>Reservation</strong> with <strong>Colleagues</strong></h2>
