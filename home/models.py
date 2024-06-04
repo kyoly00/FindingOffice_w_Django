@@ -1,6 +1,6 @@
 from django.db import models
 class Customer(models.Model):
-    cus_email = models.EmailField()
+    cus_email = models.EmailField(primary_key=True)
     cus_password = models.CharField(max_length=50)
     cus_name = models.CharField(max_length=20)
     cus_gender = models.CharField(max_length=20)
