@@ -13,3 +13,8 @@ class SignUpForm(forms.ModelForm):
             'cus_password': forms.PasswordInput(),
             'cus_email': forms.EmailInput(),
         }
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(label='Email', max_length=100)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
