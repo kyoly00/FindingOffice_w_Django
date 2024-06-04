@@ -22,12 +22,11 @@
 
 						<!-- Header -->
                         <header id="header">
-                            <div class="inner">
-
-                                <!-- Logo -->
+                                <div class="inner">
+                                    <!-- Logo -->
                                     <h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
 
-                                <!-- Nav -->
+                                    <!-- Nav -->
                                     <nav id="nav">
                                         <ul>
                                             <li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
@@ -40,12 +39,16 @@
                                             </li>
                                             <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                            <li><a href="{% url 'login' %}">Login & Register</a></li>
+                                             <li><a href="{% url 'login' %}">Login & Register</a></li>
+                                            <!-- 로그인 상태에 따라 링크 변경 -->
+                                            {% if request.session.customer_id %}
+                                                <li><a href="{% url 'logout' %}">Log out</a></li>
+                                            {% endif %}
                                         </ul>
                                     </nav>
+                                </div>
+                            </header>
 
-                            </div>
-                        </header>
                     </div>
 				</div>
 
@@ -69,7 +72,7 @@
 														</ul>
 														<ul class="menu-item"><h3>예약</h3>
 															<ul class="submenu">
-																<li><a href="#">예약 조회 및 취소</a></li>
+																<li><a href="{% url 'reservation_list' %}">예약 조회 및 취소</a></li>
 															</ul>
 														</ul>
 													</div>
@@ -83,35 +86,33 @@
 											<!-- Content -->
 
 											<div class="myinfo-form">
-												<form>
-												  <div class="form-group">
-													<label for="email">이메일</label>
-													<input type="email" id="email" name="email">
-												  </div>
-												  <div class="form-group">
-													<label for="password">비밀번호</label>
-													<input type="password" id="password" name="password">
-												  </div>
-												  <div class="form-group">
-													<label for="name">이름</label>
-													<input type="text" id="name" name="name">
-												  </div>
-												  <div class="form-group">
-													<label for="phone">전화번호</label>
-													<input type="tel" id="phone" name="phone">
-												  </div>
-												  <div class="form-group">
-													<label for="address">주소</label>
-													<input type="text" id="address" name="address">
-												  </div>
-												  <div class="form-group action-buttons">
-													<button type="submit" class="btn-complete">완료</button>
-													<button type="button" class="btn-cancel">취소</button>
-												  </div>
-												</form>
-											  </div>
-
-										</div>
+                                                <form id="customer_form" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="email">이메일</label>
+                                                        <p id="email">{{ customer.email }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="password">비밀번호</label>
+                                                        <p id="password">{{customer.password}}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="name">이름</label>
+                                                        <p id="name">{{ user.name }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="phone">전화번호</label>
+                                                        <p id="phone">{{ user.phone }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="address">주소</label>
+                                                        <p id="address">{{ customer.address }}</p>
+                                                    </div>
+                                                    <div class="form-group action-buttons">
+                                                        <!-- 액션 버튼을 여기 추가할 수 있습니다. -->
+                                                    </div>
+                                                </form>
+                                            </div>
 									</div>
 								</div>
 							</div>
@@ -236,6 +237,6 @@
 			<script src="{% static 'js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'js/util.js' %}"></script>
 			<script src="{% static 'js/main.js' %}"></script>
-
+             <script src="customer_info.js"></script>
 	</body>
 </html>

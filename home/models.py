@@ -7,8 +7,8 @@ class Customer(models.Model):
     cus_company = models.CharField(max_length=20)
     cus_phone = models.IntegerField()
     cus_address = models.CharField(max_length=20)
-    cus_latitude = models.FloatField(max_length=30)
-    cus_longitude = models.FloatField(max_length=30)
+    cus_latitude = models.FloatField(default = 0.0)
+    cus_longitude = models.FloatField(default = 0.0)
 
 class ShareOffice(models.Model):
     so_name = models.CharField(max_length=100)

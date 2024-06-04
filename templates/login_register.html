@@ -60,17 +60,20 @@
                                 <div class="login-content">
                                     <div class="cont">
                                         <div class="form sign-in">
-                                            <h2>Welcome back,</h2>
-                                            <label>
-                                            <span>Email</span>
-                                            <input type="email" />
-                                            </label>
-                                            <label>
-                                            <span>Password</span>
-                                            <input type="password" />
-                                            </label>
-                                            <p class="forgot-pass">Forgot password?</p>
-                                            <button type="button" class="submit">Sign In</button>
+                                            <h2>Login</h2>
+                                            <form method = "post">
+                                                {% csrf_token %}
+                                               {{ form.as_p }}
+                                                <button type="submit">Sign In</button>
+                                            </form>
+                                            {% if messages %}
+                                                <ul>
+                                                    {% for message in messages %}
+                                                        <li>{{ message }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+
                                         </div>
                                         <div class="sub-cont">
                                             <div class="img">
@@ -89,31 +92,44 @@
                                             </div>
                                             <div class="form sign-up">
                                                 <h2>Time to feel like home,</h2>
-                                                <div class="login-group">
+                                                <form method="post" action="{% url 'sign_up' %}">
+                                                    {% csrf_token %}
+                                                    <div class="login-group">
+                                                        <label>
+                                                            <span>Email</span>
+                                                            <input type="email" name = "cus_email" required/>
+                                                        </label>
+                                                        <label>
+                                                            <span>Password</span>
+                                                            <input type="password" name = "cus_password" required/>
+                                                        </label>
+                                                    </div>
+                                                    <div class="login-group">
+                                                        <label>
+                                                            <span>Name</span>
+                                                            <input type="text" name = "cus_name" required/>
+                                                        </label>
+                                                        <label>
+                                                            <span>Gender</span>
+                                                            <input type="tel" name = "cus_gender" required/>
+                                                        </label>
+                                                    </div>
+                                                    <div class="login-group">
+                                                        <label>
+                                                            <span>Company</span>
+                                                            <input type="text" name = "cus_company" required/>
+                                                        </label>
+                                                        <label>
+                                                            <span>Phone Number</span>
+                                                            <input type="tel" name = "cus_phone" required/>
+                                                        </label>
+                                                    </div>
                                                     <label>
-                                                        <span>Email</span>
-                                                        <input type="email" />
+                                                        <span>Address</span>
+                                                        <input type="text" name = "cus_address" id="address-text" required/>
                                                     </label>
-                                                    <label>
-                                                        <span>Password</span>
-                                                        <input type="password" />
-                                                    </label>
-                                                </div>
-                                                <div class="login-group">
-                                                    <label>
-                                                        <span>Name</span>
-                                                        <input type="text" />
-                                                    </label>
-                                                    <label>
-                                                        <span>Phone Number</span>
-                                                        <input type="tel" />
-                                                    </label>
-                                                </div>
-                                                <label>
-                                                    <span>Address</span>
-                                                    <input type="text" id="address-text"/>
-                                                </label>
-                                                <button type="button" class="submit">Sign Up</button>
+                                                    <button type="submit" class="submit">Sign Up</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
