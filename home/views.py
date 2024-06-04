@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.clickjacking import xframe_options_exempt
-
+from .forms import SignUpForm
+from django.contrib import messages
+from .models import Customer
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -38,3 +40,29 @@ def enterinfo(request):
         }
         return render(request, 'enterinfo.html', context)
     return render(request, 'recommendation.html')
+
+def sign_up(request):
+    if request.method == 'POST':
+        cus_password = request.POST.get('cus_password')
+        cus_name = request.POST.get('cus_name')
+        cus_gender = request.POST.get('cus_gender')
+        cus_email = request.POST.get('cus_email')
+        cus_company = request.POST.get('cus_company')
+        cus_phone = request.POST.get('cus_phone')
+        cus_address = request.POST.get('cus_address')
+
+        # 새로운 Customer 인스턴스 생성 및 저장
+        customer = Customer(
+            cus_password=cus_password,
+            cus_name=cus_name,
+            cus_gender=cus_gender,
+            cus_email=cus_email,
+            cus_company=cus_company,
+            cus_phone=cus_phone,
+            cus_address=cus_address,
+        )
+        customer.save()
+        messages.success(request, 'Account created successfully!')
+        return redirect('login')
+
+    return render(request, 'login_register.html')
