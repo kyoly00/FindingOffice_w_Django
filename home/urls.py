@@ -11,4 +11,5 @@ urlpatterns = [
     path('choose/', views.choose, name='choose'),
     path('recommendation/', views.recommendation, name='recommendation'),
     path('enterinfo/', views.enterinfo, name='enterinfo'),
+    path('sign_up/', views.sign_up, name='sign_up'),
 ]
