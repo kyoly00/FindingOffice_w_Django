@@ -86,27 +86,27 @@
 											<!-- Content -->
 
 											<div class="myinfo-form">
-                                                <form id="customer_form" method="post">
+                                                <form id="customer_form" method="get">
                                                     {% csrf_token %}
                                                     <div class="form-group">
                                                         <label for="email">이메일</label>
-                                                        <p id="email">{{ customer.email }}</p>
+                                                        <p id="email">{{ customer.cus_email }}</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="password">비밀번호</label>
-                                                        <p id="password">{{customer.password}}</p>
+                                                        <p id="password">{{customer.cus_password}}</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="name">이름</label>
-                                                        <p id="name">{{ user.name }}</p>
+                                                        <p id="name">{{ customer.cus_name }}</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="phone">전화번호</label>
-                                                        <p id="phone">{{ user.phone }}</p>
+                                                        <p id="phone">{{ customer.cus_phone }}</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="address">주소</label>
-                                                        <p id="address">{{ customer.address }}</p>
+                                                        <p id="address">{{ customer.cus_address }}</p>
                                                     </div>
                                                     <div class="form-group action-buttons">
                                                         <!-- 액션 버튼을 여기 추가할 수 있습니다. -->
