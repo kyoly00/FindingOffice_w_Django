@@ -3,6 +3,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from .forms import SignUpForm, LoginForm
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
 from .models import Customer, Reservation
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
@@ -24,9 +25,9 @@ def login(request):
             password = form.cleaned_data['password']
             try:
                 customer = Customer.objects.get(cus_email=email)
-                if customer.cus_password == password:
+                if check_password(password, customer.cus_password):
                     # 로그인 성공 (세션에 사용자 정보 저장)
-                    request.session['customer_id'] = customer.id
+                    request.session['customer_email'] = customer.cus_email
                     return redirect('index')  # 로그인 성공 후 리디렉션
                 else:
                     messages.error(request, 'Invalid password.')
@@ -43,17 +44,16 @@ def logout_view(request):
     return redirect('login')  # 로그아웃 후 로그인 페이지로 리디렉션
 
 def my_page(request):
-    customer_id = request.session.get('customer_id')
-    if not customer_id:
+    customer_email = request.session.get('customer_email')
+    if not customer_email:
         return redirect('login')  # 로그인되어 있지 않으면 로그인 페이지로 리디렉션
 
     try:
-        customer = Customer.objects.get(id=customer_id)
+        customer = Customer.objects.get(cus_email=customer_email)
     except Customer.DoesNotExist:
         return redirect('login')  # 고객 정보가 없으면 로그인 페이지로 리디렉션
 
     return render(request, 'mypage.html', {'customer': customer})
-# views.py
 
 def location_view(request):
     return render(request, 'location.html')
@@ -79,7 +79,7 @@ def enterinfo(request):
 
 def sign_up(request):
     if request.method == 'POST':
-        cus_password = request.POST.get('cus_password')
+        cus_password = make_password(request.POST.get('cus_password'))
         cus_name = request.POST.get('cus_name')
         cus_gender = request.POST.get('cus_gender')
         cus_email = request.POST.get('cus_email')
@@ -107,7 +107,7 @@ def sign_up(request):
 #     return render(request, 'check_reservation.html')
 
 def reservation_list(request):
-    reservations = Reservation.objects.select_related('cus_id', 'so_id')
+    reservations = Reservation.objects.select_related('cus_email', 'so_id')
     context = {
         'reservations': reservations
     }
