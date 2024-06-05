@@ -1,6 +1,6 @@
 from django.db import models
 class Customer(models.Model):
-    cus_email = models.EmailField(unique=True)
+    cus_email = models.EmailField()
     cus_password = models.CharField(max_length=50)
     cus_name = models.CharField(max_length=20)
     cus_gender = models.CharField(max_length=20)
@@ -9,9 +9,6 @@ class Customer(models.Model):
     cus_address = models.CharField(max_length=20)
     cus_latitude = models.FloatField(default = 0.0)
     cus_longitude = models.FloatField(default = 0.0)
-
-    def __str__(self):
-        return self.cus_email
 
 class ShareOffice(models.Model):
     so_name = models.CharField(max_length=100)
@@ -63,8 +60,7 @@ class Reservation(models.Model):
     re_start_time = models.DateTimeField()
     re_end_time = models.DateTimeField()
     re_cancel = models.BooleanField(default=False)
-    re_cancel_date = models.DateTimeField(null=True,blank=True)
-    re_total = models.IntegerField(default = 0)
+    re_cancel_date = models.DateTimeField()
 
 class Location(models.Model):
     cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)

@@ -6,7 +6,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
+
 	<body class="left-sidebar is-preload">
 		<div id="page-wrapper">
 
@@ -33,7 +35,7 @@
                                             </li>
                                             <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                             <li><a href="{% url 'login' %}">Login & Register</a></li>
+                                            <li><a href="{% url 'login' %}">Login & Register</a></li>
                                             <!-- 로그인 상태에 따라 링크 변경 -->
                                             {% if request.session.customer_id %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
@@ -43,12 +45,7 @@
                                 </div>
                             </header>
 
-
-                            <div id="banner">
-                                <h2><strong>Reservation</strong> with <strong>Colleagues</strong></h2>
-                            </div>
-
-					</div>
+                    </div>
 				</div>
 
 			<!-- Main Wrapper -->
@@ -63,11 +60,11 @@
 											<!-- Sidebar -->
 
 												<section>
-													<img src = 'images/shareoffice1.jpg', alt = 'shareoffice1'>
+													<img src ="{% static 'images/optimal_location.png' %}" alt = 'algorithm' width="300px">
 												</section>
 
 												<section>
-													<img src = 'images/shareoffice1.jpg', alt = 'shareoffice1'>
+													<img src = "{% static 'images/shareoffice1.jpg' %}" alt = 'shareoffice1' width="300px">
 												</section>
 
 										</div>
@@ -92,6 +89,7 @@
 							</div>
 						</div>
 					</div>
+                </div>
 
 			<!-- Footer Wrapper -->
 				<div id="footer-wrapper">
@@ -200,7 +198,6 @@
 						</div>
 					</footer>
 				</div>
-
 		</div>
 
 		<!-- Scripts -->
@@ -211,5 +208,5 @@
 			<script src="{% static 'js/util.js'%}"></script>
 			<script src="{% static 'js/main.js' %}"></script>
 
-	</body>
+    </body>
 </html>
