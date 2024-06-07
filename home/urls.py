@@ -16,5 +16,4 @@ urlpatterns = [
     path('list/', views.reservation_list, name='reservation_list'),
     # path('customer/<int:customer_id>/', views.customer_info, name='customer_info'),
     path('logout/', views.logout_view, name='logout'),
-    path('ranking/', views.ranking, name='ranking'),
 ]
