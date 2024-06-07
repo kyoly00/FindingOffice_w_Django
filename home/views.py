@@ -7,6 +7,13 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import Customer, Reservation
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
+
+from urllib import parse
+from urllib.request import urlopen
+from urllib.request import Request
+from urllib.error import HTTPError
+from bs4 import BeautifulSoup
+import json
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -117,3 +124,21 @@ def reservation_list(request):
 #     customer = get_object_or_404(Customer, id=customer_id)
 #     return render(request, 'mypage.html', {'customer': customer})
 
+def choose_func(request):
+    if request.method == 'POST':
+        finding_option = request.POST.get('finding_option')
+
+        if finding_option == 'near_finding':
+            try:
+                customer = Customer.objects.get(cus_email=request.user.email)
+                cus_latitude = customer.cus_latitude
+                cus_longitude = customer.cus_lognitude
+                return redirect('choose')  # 적절한 뷰로 리다이렉트
+            except Customer.DoesNotExist:
+                messages.error(request, 'Customer not found.')
+                return redirect('choose_func')
+
+        elif finding_option in ['together_finding', 'location_finding']:
+            return redirect('location_view')  # address.html로 이동
+
+    return render(request, 'choose_func.html')  # 기본적으로 폼을 다시 렌더링

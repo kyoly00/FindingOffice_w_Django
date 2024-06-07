@@ -34,6 +34,8 @@
 //     });
 // });
 
+let count = 1;
+
 document.addEventListener('DOMContentLoaded', function () {
     const addAddressButton = document.getElementById('addAddressButton');
     const addressInputs = document.getElementById('addressInputs');
@@ -44,14 +46,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const newAddressInput = document.createElement('input');
         newAddressInput.type = 'text';
-        newAddressInput.name = 'address[]';
+
+        count++;
+        newAddressInput.name = 'address' + count;
         newAddressInput.placeholder = '주소';
         newAddressInput.classList.add('form-control');
         newAddressInput.required = true;
 
         const newPeopleInput = document.createElement('input');
         newPeopleInput.type = 'number';
-        newPeopleInput.name = 'people[]';
+        newPeopleInput.name = 'people' + count;
         newPeopleInput.placeholder = '인원 수';
         newPeopleInput.classList.add('form-control');
         newPeopleInput.min = '1';
