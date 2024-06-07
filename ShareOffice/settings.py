@@ -141,3 +141,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = 'home'
+
+NAVER_MAPS_CLIENT_ID = os.getenv('NAVER_MAPS_CLIENT_ID', 'w8mx4s9fio')
+NAVER_MAPS_CLIENT_SECRET = os.getenv('NAVER_MAPS_CLIENT_SECRET', 'qvbLEHUTP8q7p5FG4xcPTwRAMmC6ZErz3DC2OFEh')

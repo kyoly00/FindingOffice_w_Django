@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.clickjacking import xframe_options_exempt
-from .forms import SignUpForm, LoginForm
+from home.forms import SignUpForm, LoginForm
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Customer, Reservation
+from .models import Customer, Reservation, ShareOffice, Location
+from django.db.models import Count
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+import requests
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -39,8 +42,8 @@ def login(request):
     return render(request, 'login_register.html', {'form': form})
 
 def logout_view(request):
-    if 'customer_id' in request.session:
-        del request.session['customer_id']
+    if 'customer_email' in request.session:
+        del request.session['customer_email']
     return redirect('login')  # 로그아웃 후 로그인 페이지로 리디렉션
 
 def my_page(request):
@@ -107,13 +110,35 @@ def sign_up(request):
 #     return render(request, 'check_reservation.html')
 
 def reservation_list(request):
-    reservations = Reservation.objects.select_related('cus_email', 'so_id')
-    context = {
-        'reservations': reservations
-    }
-    return render(request, 'check_reservation.html', context)
+    # 로그인한 사용자의 이메일을 가져옵니다.
+    customer_email = request.session.get('customer_email')
+    if not customer_email:
+        return redirect('login')  # 로그인되어 있지 않으면 로그인 페이지로 리디렉션
+
+    # 해당 사용자의 예약 정보를 가져옵니다.
+    reservations = Reservation.objects.filter(cus_email=customer_email).select_related('cus_email', 'so_id')
+
+    return render(request, 'check_reservation.html', {'reservations': reservations})
 
 # def customer_info(request, customer_id):
 #     customer = get_object_or_404(Customer, id=customer_id)
 #     return render(request, 'mypage.html', {'customer': customer})
 
+def ranking(request):
+    top_offices = (Reservation.objects.values('so_id')
+                   .annotate(count=Count('so_id'))
+                   .order_by('-count')[:5])
+
+    top_office_details = []
+    for office in top_offices:
+        try:
+            share_office = ShareOffice.objects.get(id=office['so_id'])
+            top_office_details.append({
+                'name': share_office.so_name,
+                'address': share_office.so_address,
+                'count': office['count']
+            })
+        except ShareOffice.DoesNotExist:
+            continue
+
+    return render(request, 'index.html',{'top_offices':top_office_details})

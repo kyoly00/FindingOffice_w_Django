@@ -1,64 +1,29 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     // 모달 요소 가져오기
-//     const reservationModal = document.getElementById('reservationModal');
-//     // 추가 버튼 가져오기
-//     const addButton = document.getElementById('addButton');
-//     // 주소 입력 폼의 부모 요소 가져오기
-//     const formGroup = document.querySelector('.form-group');
+document.addEventListener('DOMContentLoaded', function() {
+    var addAddressButton = document.getElementById('addAddressButton');
+    var addressInputs = document.getElementById('addressInputs');
 
-//     // 추가 버튼 클릭 시 이벤트 처리
-//     addButton.addEventListener('click', function () {
-//         // 새로운 주소 입력 필드 생성
-//         const newAddressInput = document.createElement('input');
-//         newAddressInput.type = 'text';
-//         newAddressInput.name = 'address';
-//         newAddressInput.placeholder = '주소를 입력하세요';
-//         newAddressInput.classList.add('form-control');
-//         newAddressInput.required = true;
-
-//         // 주소 입력 폼에 새로운 입력 필드 추가
-//         formGroup.appendChild(newAddressInput);
-//     });
-// });
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     const addAddressButton = document.getElementById('addAddressButton');
-//     const addressInputs = document.getElementById('addressInputs');
-
-//     addAddressButton.addEventListener('click', function () {
-//         const newAddressInput = document.createElement('input');
-//         newAddressInput.type = 'text';
-//         newAddressInput.name = 'address[]';
-//         newAddressInput.placeholder = '주소';
-//         addressInputs.appendChild(newAddressInput);
-//     });
-// });
-
-document.addEventListener('DOMContentLoaded', function () {
-    const addAddressButton = document.getElementById('addAddressButton');
-    const addressInputs = document.getElementById('addressInputs');
-
-    addAddressButton.addEventListener('click', function () {
-        const addressGroup = document.createElement('div');
+    addAddressButton.addEventListener('click', function() {
+        var addressGroup = document.createElement('div');
         addressGroup.classList.add('address-group');
 
-        const newAddressInput = document.createElement('input');
-        newAddressInput.type = 'text';
-        newAddressInput.name = 'address[]';
-        newAddressInput.placeholder = '주소';
-        newAddressInput.classList.add('form-control');
-        newAddressInput.required = true;
+        var addressInput = document.createElement('input');
+        addressInput.type = 'text';
+        addressInput.name = 'address[]';
+        addressInput.placeholder = '주소';
+        addressInput.classList.add('form-control');
+        addressInput.required = true;
 
-        const newPeopleInput = document.createElement('input');
-        newPeopleInput.type = 'number';
-        newPeopleInput.name = 'people[]';
-        newPeopleInput.placeholder = '인원 수';
-        newPeopleInput.classList.add('form-control');
-        newPeopleInput.min = '1';
-        newPeopleInput.required = true;
+        var peopleInput = document.createElement('input');
+        peopleInput.type = 'number';
+        peopleInput.name = 'people[]';
+        peopleInput.placeholder = '인원 수';
+        peopleInput.classList.add('form-control');
+        peopleInput.min = 1;
+        peopleInput.required = true;
 
-        addressGroup.appendChild(newAddressInput);
-        addressGroup.appendChild(newPeopleInput);
+        addressGroup.appendChild(addressInput);
+        addressGroup.appendChild(peopleInput);
+
         addressInputs.appendChild(addressGroup);
     });
 });

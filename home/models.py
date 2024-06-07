@@ -1,7 +1,7 @@
 from django.db import models
 class Customer(models.Model):
-    cus_email = models.EmailField()
-    cus_password = models.CharField(max_length=50)
+    cus_email = models.EmailField(primary_key=True)
+    cus_password = models.CharField(max_length=255)
     cus_name = models.CharField(max_length=20)
     cus_gender = models.CharField(max_length=20)
     cus_company = models.CharField(max_length=20)
@@ -55,15 +55,15 @@ class ShareOffice(models.Model):
     so_bath_fclty = models.BooleanField()
 
 class Reservation(models.Model):
-    cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cus_email = models.ForeignKey(Customer, on_delete=models.CASCADE, db_column='cus_email', default='default_email@example.com')
     so_id = models.ForeignKey(ShareOffice, on_delete=models.CASCADE)
     re_start_time = models.DateTimeField()
     re_end_time = models.DateTimeField()
     re_cancel = models.BooleanField(default=False)
-    re_cancel_date = models.DateTimeField()
+    re_cancel_date = models.DateTimeField(null=True, blank=True, default=None)
 
 class Location(models.Model):
-    cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cus_email = models.ForeignKey(Customer, on_delete=models.CASCADE, db_column='cus_email', default='default_email@example.com')
     lo_latitude = models.FloatField(max_length=30)
     lo_longitude = models.FloatField(max_length=30)
 

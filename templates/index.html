@@ -37,12 +37,13 @@
                                                     <li><a href="{% url 'together' %}">With Colleagues</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
+                                            <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                             <li><a href="{% url 'login' %}">Login & Register</a></li>
                                             <!-- 로그인 상태에 따라 링크 변경 -->
-                                            {% if request.session.customer_id %}
+                                            {% if request.session.customer_email %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'login' %}">Login & Register</a></li>
                                             {% endif %}
                                         </ul>
                                     </nav>
@@ -135,38 +136,36 @@
 									  <header class="major">
 									   <h2>Ranking</h2>
 									  </header>
-									</div>
-								   </div>
-								   <table class="modern-table">
+                                    </div>
+                                 </div>
+                                  <table class="modern-table">
 									<thead>
-									  <tr>
-									   <th>1st</th>
-									   <th>2nd</th>
-									   <th>3rd</th>
-									   <th>4th</th>
-									   <th>5th</th>
-									  </tr>
-									</thead>
-									<tbody>
-									  <tr>
-									   <td>이름1</td>
-									   <td>이름2</td>
-									   <td>이름3</td>
-									   <td>이름4</td>
-									   <td>이름5</td>
-									  </tr>
-									  <tr>
-									   <td>주소1</td>
-									   <td>주소2</td>
-									   <td>주소3</td>
-									   <td>주소4</td>
-									   <td>주소5</td>
-									  </tr>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for office in top_offices %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ office.name }}</td>
+                                            <td>{{ office.address }}</td>
+
+
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4">No data available</td>
+                                        </tr>
+                                        {% endfor %}
 									</tbody>
-								   </table>                                                                                   
-							  </section>
+                                  </table>
+                                </section>
 						</div>
-					 </div>					<div class="wrapper style3">
+					 </div>
+                    <div class="wrapper style3">
 						<div class="inner">
 							<div class="container">
 								<div class="row">
