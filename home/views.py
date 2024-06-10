@@ -16,10 +16,14 @@ from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 import json
 import requests
+import os
+from dotenv import load_dotenv
 # Create your views here.
 
-Client_ID = 'bswnqzqfs1'
-Client_Secret = 'R3iRNXVYG3QvCQMEOX5cfkuGY6HCoRHOb2uQFQXY'
+load_dotenv()
+
+Client_ID = os.getenv('CLIENT_ID')
+Client_Secret = os.getenv('CLIENT_SECRET')
 api_url = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query='
 
 # google map api
