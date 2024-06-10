@@ -37,9 +37,9 @@
                                                     <li><a href="{% url 'together' %}">With Colleagues</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
+                                            <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                             {% if request.session.customer_email %}
+                                            {% if request.session.customer_email %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
                                             {% else %}
                                                 <li><a href="{% url 'login' %}">Login & Register</a></li>
@@ -48,7 +48,6 @@
                                     </nav>
                                 </div>
                             </header>
-
                     </div>
 				</div>
 
@@ -72,7 +71,7 @@
 														</ul>
 														<ul class="menu-item"><h3>예약</h3>
 															<ul class="submenu">
-																<li><a href="{% url 'reservation_list' %}">예약 조회 및 취소</a></li>
+																<li><a href="#">예약 조회 및 취소</a></li>
 															</ul>
 														</ul>
 													</div>
@@ -82,37 +81,32 @@
 
 									<div class="col-8 col-12-medium imp-medium">
 										<div id="content">
+                                            <table>
+                                                <tr>
+                                                    <th>공유오피스 이름</th>
+                                                    <th>예약 인원</th>
+                                                    <th>시작 시간</th>
+                                                    <th>종료 시간</th>
+                                                    <th>취소</th>
+                                                </tr>
+                                                {% for reservation in reservations %}
+                                                <tr>
+                                                    <td>{{ reservation.so_id.so_name }}</td>
+                                                    <td>{{ reservation.re_total }}</td>
+                                                    <td>{{ reservation.re_start_time }}</td>
+                                                    <td>{{ reservation.re_end_time }}</td>
+                                                    <td>
+                                                        <a class="button" href="{% url 'delete_reservation' reservation.id %}">취소</a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </table>
 
 											<!-- Content -->
 
-											<div class="myinfo-form">
-                                                <form id="customer_form" method="get">
-                                                    {% csrf_token %}
-                                                    <div class="form-group">
-                                                        <label for="email">이메일</label>
-                                                        <p id="email">{{ customer.cus_email }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="password">비밀번호</label>
-                                                        <p id="password">{{customer.cus_password}}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="name">이름</label>
-                                                        <p id="name">{{ customer.cus_name }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="phone">전화번호</label>
-                                                        <p id="phone">{{ customer.cus_phone }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="address">주소</label>
-                                                        <p id="address">{{ customer.cus_address }}</p>
-                                                    </div>
-                                                    <div class="form-group action-buttons">
-                                                        <!-- 액션 버튼을 여기 추가할 수 있습니다. -->
-                                                    </div>
-                                                </form>
-                                            </div>
+
+
+										</div>
 									</div>
 								</div>
 							</div>
@@ -145,9 +139,45 @@
 									</section>
 
 							</div>
-							<div class="col-6 col-12-medium imp-medium">
+							<div class="col-3 col-6-medium col-12-small">
 
 								<!-- Links -->
+									<section>
+										<h2>More Filler</h2>
+										<ul class="divided">
+											<li><a href="#">Quam turpis feugiat dolor</a></li>
+											<li><a href="#">Amet ornare in in lectus</a></li>
+											<li><a href="#">Semper mod sed tempus nisi</a></li>
+											<li><a href="#">Consequat etiam phasellus</a></li>
+										</ul>
+									</section>
+
+								<!-- Links -->
+									<section>
+										<h2>Even More Filler</h2>
+										<ul class="divided">
+											<li><a href="#">Quam turpis feugiat dolor</a></li>
+											<li><a href="#">Amet ornare hendrerit lectus</a></li>
+											<li><a href="#">Semper quisturpis nisi</a></li>
+											<li><a href="#">Consequat lorem phasellus</a></li>
+										</ul>
+									</section>
+
+							</div>
+							<div class="col-6 col-12-medium imp-medium">
+
+								<!-- About -->
+									<section>
+										<h2><strong>ZeroFour</strong> by HTML5 UP</h2>
+										<p>Hi! This is <strong>ZeroFour</strong>, a free, fully responsive HTML5 site
+										template by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a>.
+										It's <a href="http://html5up.net/license/">Creative Commons Attribution</a>
+										licensed so use it for any personal or commercial project (just credit us
+										for the design!).</p>
+										<a href="#" class="button alt icon solid fa-arrow-circle-right">Learn More</a>
+									</section>
+
+								<!-- Contact -->
 									<section>
 										<h2>Get in touch</h2>
 										<div>
@@ -155,13 +185,13 @@
 												<div class="col-6 col-12-small">
 													<dl class="contact">
 														<dt>Twitter</dt>
-														<dd><a href="#">@FindingOffice-corp</a></dd>
+														<dd><a href="#">@untitled-corp</a></dd>
 														<dt>Facebook</dt>
-														<dd><a href="#">facebook.com/finding_office</a></dd>
+														<dd><a href="#">facebook.com/untitled</a></dd>
 														<dt>WWW</dt>
-														<dd><a href="#">findingoffice.tld</a></dd>
+														<dd><a href="#">untitled.tld</a></dd>
 														<dt>Email</dt>
-														<dd><a href="#">findingoffice@gmail.com</a></dd>
+														<dd><a href="#">user@untitled.tld</a></dd>
 													</dl>
 												</div>
 												<div class="col-6 col-12-small">
@@ -173,20 +203,12 @@
 															USA
 														</dd>
 														<dt>Phone</dt>
-														<dd>(02) 885-1234</dd>
+														<dd>(000) 000-0000</dd>
 													</dl>
 												</div>
 											</div>
 										</div>
 									</section>
-                            </div>
-
-
-
-
-
-								<!-- Contact -->
-
 
 							</div>
 							<div class="col-12">
@@ -209,6 +231,6 @@
 			<script src="{% static 'js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'js/util.js' %}"></script>
 			<script src="{% static 'js/main.js' %}"></script>
-             <script src="customer_info.js"></script>
+
 	</body>
 </html>

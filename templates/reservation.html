@@ -33,12 +33,12 @@
                                                     <li><a href="{% url 'together' %}">With Colleagues</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
+                                            <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                            <li><a href="{% url 'login' %}">Login & Register</a></li>
-                                            <!-- 로그인 상태에 따라 링크 변경 -->
-                                            {% if request.session.customer_id %}
+                                            {% if request.session.customer_email %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'login' %}">Login & Register</a></li>
                                             {% endif %}
                                         </ul>
                                     </nav>
@@ -116,45 +116,9 @@
 									</section>
 
 							</div>
-							<div class="col-3 col-6-medium col-12-small">
-
-								<!-- Links -->
-									<section>
-										<h2>More Filler</h2>
-										<ul class="divided">
-											<li><a href="#">Quam turpis feugiat dolor</a></li>
-											<li><a href="#">Amet ornare in in lectus</a></li>
-											<li><a href="#">Semper mod sed tempus nisi</a></li>
-											<li><a href="#">Consequat etiam phasellus</a></li>
-										</ul>
-									</section>
-
-								<!-- Links -->
-									<section>
-										<h2>Even More Filler</h2>
-										<ul class="divided">
-											<li><a href="#">Quam turpis feugiat dolor</a></li>
-											<li><a href="#">Amet ornare hendrerit lectus</a></li>
-											<li><a href="#">Semper quisturpis nisi</a></li>
-											<li><a href="#">Consequat lorem phasellus</a></li>
-										</ul>
-									</section>
-
-							</div>
 							<div class="col-6 col-12-medium imp-medium">
 
-								<!-- About -->
-									<section>
-										<h2><strong>ZeroFour</strong> by HTML5 UP</h2>
-										<p>Hi! This is <strong>ZeroFour</strong>, a free, fully responsive HTML5 site
-										template by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a>.
-										It's <a href="http://html5up.net/license/">Creative Commons Attribution</a>
-										licensed so use it for any personal or commercial project (just credit us
-										for the design!).</p>
-										<a href="#" class="button alt icon solid fa-arrow-circle-right">Learn More</a>
-									</section>
-
-								<!-- Contact -->
+								<!-- Links -->
 									<section>
 										<h2>Get in touch</h2>
 										<div>
@@ -162,13 +126,13 @@
 												<div class="col-6 col-12-small">
 													<dl class="contact">
 														<dt>Twitter</dt>
-														<dd><a href="#">@untitled-corp</a></dd>
+														<dd><a href="#">@FindingOffice-corp</a></dd>
 														<dt>Facebook</dt>
-														<dd><a href="#">facebook.com/untitled</a></dd>
+														<dd><a href="#">facebook.com/finding_office</a></dd>
 														<dt>WWW</dt>
-														<dd><a href="#">untitled.tld</a></dd>
+														<dd><a href="#">findingoffice.tld</a></dd>
 														<dt>Email</dt>
-														<dd><a href="#">user@untitled.tld</a></dd>
+														<dd><a href="#">findingoffice@gmail.com</a></dd>
 													</dl>
 												</div>
 												<div class="col-6 col-12-small">
@@ -180,12 +144,16 @@
 															USA
 														</dd>
 														<dt>Phone</dt>
-														<dd>(000) 000-0000</dd>
+														<dd>(02) 885-1234</dd>
 													</dl>
 												</div>
 											</div>
 										</div>
 									</section>
+                            </div>
+
+								<!-- Contact -->
+
 
 							</div>
 							<div class="col-12">
