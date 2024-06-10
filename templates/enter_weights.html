@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Importance Weights</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .importance-select {
+            width: 100%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Importance Weights</h1>
+    <p>Compare each pair of facilities and select how much more important one is compared to the other. A higher number indicates greater importance.</p>
+    <p>Example: If Facility A is 3 times more important than Facility B, select 3 from the dropdown for Facility A > Facility B.</p>
+    <form action="{% url 'calculate_weights' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="selected_facilities" value="{{ selected_facilities|join:',' }}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Facility 1</th>
+                    <th>Facility 2</th>
+                    <th>Importance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in selected_facilities %}
+                    {% for j in selected_facilities %}
+                        {% if forloop.parentloop.counter0 < forloop.counter0 %}
+                            <tr>
+                                <td>{{ i }}</td>
+                                <td>{{ j }}</td>
+                                <td>
+                                    <select name="importance_{{ i }}_{{ j }}" class="importance-select" required>
+                                        <option value="" disabled selected>Select importance</option>
+                                        {% for k in "123456789" %}
+                                            <option value="{{ k }}">{{ k }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Calculate</button>
+    </form>
+</body>
+</html>
