@@ -33,7 +33,7 @@
 //         addressInputs.appendChild(newAddressInput);
 //     });
 // });
-
+let count = 1;
 document.addEventListener('DOMContentLoaded', function () {
     const addAddressButton = document.getElementById('addAddressButton');
     const addressInputs = document.getElementById('addressInputs');

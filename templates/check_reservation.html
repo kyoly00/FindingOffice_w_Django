@@ -39,10 +39,10 @@
                                             </li>
                                             <li><a href="{% url 'index' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                             <li><a href="{% url 'login' %}">Login & Register</a></li>
-                                            <!-- 로그인 상태에 따라 링크 변경 -->
-                                            {% if request.session.customer_id %}
+                                            {% if request.session.customer_email %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'login' %}">Login & Register</a></li>
                                             {% endif %}
                                         </ul>
                                     </nav>
@@ -96,7 +96,7 @@
                                                     <td>{{ reservation.re_start_time }}</td>
                                                     <td>{{ reservation.re_end_time }}</td>
                                                     <td>
-                                                        <button type = submit>취소</button>
+                                                        <a class="button" href="{% url 'delete_reservation' reservation.id %}">취소</a>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}

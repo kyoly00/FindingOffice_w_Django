@@ -14,11 +14,12 @@
 <body>
     <div class="container">
         <h1>예약 페이지</h1>
-        <h3>Name</h3>
-        {% for name,address in selected_data %}
-        <b>{{ name }}</b>
-        <h3>Address</h3>
-        <b>{{ address }}</b>
+        {% for name, address in selected_data %}
+            <h3>Name</h3>
+            <b>{{ name }}</b>
+            <h3>Address</h3>
+            <b>{{ address }}</b>
+            <br><br>
         {% endfor %}
     </br>
     </br>
