@@ -32,10 +32,8 @@
                         <td>{{ office.so_price }}</td>
                         <td>{{ office.so_max_people }}</td>
                         <td>
-                            {% for facility in user_selected_facilities %}
-                                {% if facility in office.facilities %}
-                                    {{ facility }}{% if not forloop.last %}, {% endif %}
-                                {% endif %}
+                            {% for facility in office.facilities.all %}
+                                {{ facility.name }}{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </td>
                     </tr>
