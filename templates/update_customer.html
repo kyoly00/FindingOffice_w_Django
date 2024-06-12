@@ -1,0 +1,16 @@
+{% extends "mypage_base.html" %}
+
+{% block contents %}
+<div class="col-8 col-12-medium imp-medium">
+    <div id="content">
+        <div class="myinfo-form">
+            <form method="post" action = "{% url 'update_customer' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">수정</button>
+            </form>
+            <a href="{% url 'mypage' %}">돌아가기</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

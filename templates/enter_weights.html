@@ -25,42 +25,35 @@
     </style>
 </head>
 <body>
-    <h1>Enter Importance Weights</h1>
-    <p>Compare each pair of facilities and select how much more important one is compared to the other. A higher number indicates greater importance.</p>
-    <p>Example: If Facility A is 3 times more important than Facility B, select 3 from the dropdown for Facility A > Facility B.</p>
+    <h1>중요도 가중치 입력</h1>
+    <p>각 편의시설의 중요도를 1 (가장 중요)에서 {{ selected_facilities|length }} (가장 덜 중요)까지 순위를 매겨주세요.</p>
     <form action="{% url 'calculate_weights' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="selected_facilities" value="{{ selected_facilities|join:',' }}">
         <table>
             <thead>
                 <tr>
-                    <th>Facility 1</th>
-                    <th>Facility 2</th>
-                    <th>Importance</th>
+                    <th>편의시설</th>
+                    <th>순위</th>
                 </tr>
             </thead>
             <tbody>
-                {% for i in selected_facilities %}
-                    {% for j in selected_facilities %}
-                        {% if forloop.parentloop.counter0 < forloop.counter0 %}
-                            <tr>
-                                <td>{{ i }}</td>
-                                <td>{{ j }}</td>
-                                <td>
-                                    <select name="importance_{{ i }}_{{ j }}" class="importance-select" required>
-                                        <option value="" disabled selected>Select importance</option>
-                                        {% for k in "123456789" %}
-                                            <option value="{{ k }}">{{ k }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                {% for facility in selected_facilities %}
+                    <tr>
+                        <td>{{ facility }}</td>
+                        <td>
+                            <select name="rank_{{ facility }}" class="importance-select" required>
+                                <option value="" disabled selected>순위 선택</option>
+                                {% for rank in rank_options %}
+                                    <option value="{{ rank }}">{{ rank }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit">Calculate</button>
+        <button type="submit">계산하기</button>
     </form>
 </body>
 </html>

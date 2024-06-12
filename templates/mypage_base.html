@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    </div>
+
+			<!-- Main Wrapper -->
+				<div id="main-wrapper">
+					<div class="wrapper style2">
+						<div class="inner">
+							<div class="container">
+								<div class="row">
+									<div class="col-4 col-12-medium">
+										<!-- Sidebar -->
+											<section>
+												<header class="major">
+													<h2>MY PAGE</h2>
+													<div class="mypage-sidebar">
+														<ul class="menu-item"><h3>회원 관리</h3>
+															<ul class="submenu">
+																<li><a href="{% url 'update_customer' %}">회원 정보 수정</a></li>
+																<li><a href="{% url 'delete_customer' %}">회원 탈퇴</a></li>
+															</ul>
+														</ul>
+														<ul class="menu-item"><h3>예약</h3>
+															<ul class="submenu">
+																<li><a href="{% url 'reservation_list' %}">예약 조회 및 취소</a></li>
+															</ul>
+														</ul>
+													</div>
+												</header>
+											</section>
+									</div>
+
+                    {% block contents %}
+
+
+                    {% endblock %}
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			<!-- Footer Wrapper -->
+{% endblock %}
