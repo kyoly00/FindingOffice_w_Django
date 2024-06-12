@@ -1,7 +1,9 @@
 # forms.py
 from django import forms
+
 from .models import Customer, Reservation
 from django.forms.widgets import DateTimeInput
+
 
 class SignUpForm(forms.ModelForm):
     class Meta:
@@ -35,4 +37,3 @@ class CustomerUpdateForm(forms.ModelForm):
         fields = ['cus_password', 'cus_name', 'cus_phone', 'cus_address']
         widgets = {
             'cus_password': forms.PasswordInput(),
-        }
