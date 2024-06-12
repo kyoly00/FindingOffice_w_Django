@@ -1,54 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
 {% load static %}
-<!DOCTYPE HTML>
-<html lang='en'>
-	<head>
-		<title>Left Sidebar - ZeroFour by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	</head>
-
-	<body class="left-sidebar is-preload">
-		<div id="page-wrapper">
-
-			<!-- Header Wrapper -->
-				<div id="header-wrapper">
-					<div class="container">
-
-						<!-- Header -->
-							<header id="header">
-                                <div class="inner">
-                                    <!-- Logo -->
-                                    <h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
-
-                                    <!-- Nav -->
-                                    <nav id="nav">
-                                        <ul>
-                                            <li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
-                                            <li>
-                                                <a href="#">Reservation</a>
-                                                <ul>
-                                                    <li><a href="{% url 'alone' %}">Alone</a></li>
-                                                    <li><a href="{% url 'together' %}">With Colleagues</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
-                                            <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                            {% if request.session.customer_email %}
-                                                <li><a href="{% url 'logout' %}">Log out</a></li>
-                                            {% else %}
-                                                <li><a href="{% url 'login' %}">Login & Register</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </header>
-
-                    </div>
-				</div>
-
-			<!-- Main Wrapper -->
+    </div>
 				<div id="main-wrapper">
 					<div class="wrapper style2">
 						<div class="inner">
@@ -71,9 +26,6 @@
 									</div>
 									<div class="col-8 col-12-medium imp-medium">
 										<div id="content">
-
-											<!-- Content -->
-
 												<article>
 													<header class="major">
                                                         <img src="{% static 'images/logo.png' %}" alt="" height="auto" width="200px"/>
@@ -90,91 +42,5 @@
 						</div>
 					</div>
                 </div>
-
-			<!-- Footer Wrapper -->
-				<div id="footer-wrapper">
-					<footer id="footer" class="container">
-						<div class="row">
-							<div class="col-3 col-6-medium col-12-small">
-
-								<!-- Links -->
-									<section>
-										<h2>Filler Links</h2>
-										<ul class="divided">
-											<li><a href="#">Quam turpis feugiat dolor</a></li>
-											<li><a href="#">Amet ornare in hendrerit </a></li>
-											<li><a href="#">Semper mod quisturpis nisi</a></li>
-											<li><a href="#">Consequat etiam phasellus</a></li>
-											<li><a href="#">Amet turpis, feugiat et</a></li>
-											<li><a href="#">Ornare hendrerit lectus</a></li>
-											<li><a href="#">Semper mod quis et dolore</a></li>
-											<li><a href="#">Amet ornare in hendrerit</a></li>
-											<li><a href="#">Consequat lorem phasellus</a></li>
-											<li><a href="#">Amet turpis, feugiat amet</a></li>
-											<li><a href="#">Semper mod quisturpis</a></li>
-										</ul>
-									</section>
-
-							</div>
-							<div class="col-6 col-12-medium imp-medium">
-
-								<!-- Links -->
-									<section>
-										<h2>Get in touch</h2>
-										<div>
-											<div class="row">
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Twitter</dt>
-														<dd><a href="#">@FindingOffice-corp</a></dd>
-														<dt>Facebook</dt>
-														<dd><a href="#">facebook.com/finding_office</a></dd>
-														<dt>WWW</dt>
-														<dd><a href="#">findingoffice.tld</a></dd>
-														<dt>Email</dt>
-														<dd><a href="#">findingoffice@gmail.com</a></dd>
-													</dl>
-												</div>
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Address</dt>
-														<dd>
-															1234 Fictional Rd<br />
-															Nashville, TN 00000-0000<br />
-															USA
-														</dd>
-														<dt>Phone</dt>
-														<dd>(02) 885-1234</dd>
-													</dl>
-												</div>
-											</div>
-										</div>
-									</section>
-                            </div>
-
-								<!-- Contact -->
-
-
-							</div>
-							<div class="col-12">
-								<div id="copyright">
-									<ul class="menu">
-										<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</footer>
-				</div>
-		</div>
-
-		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
-			<script src="{% static 'js/browser.min.js'%}"></script>
-			<script src="{% static 'js/breakpoints.min.js'%}"></script>
-			<script src="{% static 'js/util.js'%}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
-
-    </body>
-</html>
+    </div>
+{% endblock %}

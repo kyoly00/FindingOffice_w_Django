@@ -95,6 +95,8 @@ def update_customer(request):
 
     return render(request, 'update_customer.html', {'form':form})
 
+
+
 def location_view(request):
     return render(request, 'location.html')
 
@@ -153,7 +155,7 @@ def enterinfo(request):
             reservation.save()
 
             messages.success(request, '예약이 완료되었습니다.')  # 예약 성공 메시지 추가
-            return redirect('index')  # 예약 완료 후 리디렉션
+            return redirect('choose_func')  # 예약 완료 후 리디렉션
         else:
             print(form.errors)
             messages.error(request, '유효하지 않은 입력입니다.')
@@ -253,8 +255,12 @@ def choose(request):
         return render(request, 'choose.html')
     elif request.method == 'POST':
         selected_facilities = request.POST.getlist('facilities')
-        request.session['selected_facilities'] = selected_facilities  # 세션에 저장
-        return render(request, 'enter_weights.html', {'selected_facilities': selected_facilities})
+        request.session['selected_facilities'] = selected_facilities
+        num_facilities = len(selected_facilities)
+        rank_options = list(range(1, num_facilities + 1))        # 세션에 저장
+        return render(request, 'enter_weights.html', {
+            'selected_facilities': selected_facilities,
+        'rank_options': rank_options})
 
 def recommend_offices(selected_facilities, weights):
     facility_mapping = {
@@ -287,8 +293,8 @@ def recommend_offices(selected_facilities, weights):
         score = 0
         office_facilities = []
         for facility in selected_facilities:
-            model_field = facility_mapping[facility]
-            if getattr(office, model_field):
+            model_field = facility_mapping.get(facility)
+            if model_field and getattr(office, model_field):
                 score += weights[facility]
                 office_facilities.append(facility)
         office.facilities = office_facilities
@@ -297,47 +303,61 @@ def recommend_offices(selected_facilities, weights):
     scores.sort(key=lambda x: x[1], reverse=True)
     return [office for office, score in scores]
 
-def calculate_weights(matrix):
-    if not matrix.shape[0] == matrix.shape[1]:
-        raise ValueError("Input matrix must be square.")
-    if not np.issubdtype(matrix.dtype, np.number):
-        raise ValueError("Matrix data type must be numeric.")
 
-    eigvals, eigvecs = eig(matrix)
-    eigvals = eigvals.real
-    max_eigval_index = np.argmax(eigvals)
-    weights = eigvecs[:, max_eigval_index].real
-    if np.sum(weights) == 0:
-        raise ValueError("Sum of weights is zero, cannot normalize.")
-    weights = weights / np.sum(weights)
-    return weights
+def calculate_weights(request):
+    if request.method == 'POST':
+        selected_facilities = request.POST['selected_facilities'].split(',')
+        num_facilities = len(selected_facilities)
+
+        # 순위 수집 및 정렬
+        ranks = []
+        for facility in selected_facilities:
+            rank = int(request.POST[f'rank_{facility}'])
+            ranks.append((facility, rank))
+        ranks.sort(key=lambda x: x[1])
+
+        # 순위에 반비례하여 가중치 할당
+        weights = np.array([1 / rank for facility, rank in ranks])
+
+        # 가중치 정규화
+        weights /= np.sum(weights)
+
+        return render(request, 'recommendation.html',
+                      {'weights': weights, 'facilities': [facility for facility, rank in ranks]})
+    else:
+        raise ValueError("지원되지 않는 요청 방법입니다.")
+
 
 def calculate_weights_view(request):
+    selected_facilities = request.session.get('selected_facilities', [])
+    num_facilities = len(selected_facilities)
+
     if request.method == 'POST':
-        selected_facilities = request.session.get('selected_facilities', [])
-        num_facilities = len(selected_facilities)
-        matrix = np.ones((num_facilities, num_facilities), dtype=float)
-
-        for i, facility1 in enumerate(selected_facilities):
-            for j, facility2 in enumerate(selected_facilities):
-                if i < j:
-                    try:
-                        importance = float(request.POST.get(f'importance_{facility1}_{facility2}', 1))
-                        if importance == 0:
-                            return HttpResponseBadRequest("중요도는 0이 될 수 없습니다.")
-                        matrix[i, j] = importance
-                        matrix[j, i] = 1 / importance
-                    except ValueError:
-                        return HttpResponseBadRequest("중요도는 숫자여야 합니다.")
-
+        ranks = []
         try:
-            weights = calculate_weights(matrix)
-        except ValueError as e:
-            return render(request, 'error.html', {'error_message': str(e)})
+            for facility in selected_facilities:
+                rank = int(request.POST.get(f'rank_{facility}'))
+                if rank <= 0 or rank > num_facilities:
+                    return HttpResponseBadRequest("순위는 1부터 선택된 편의시설의 수까지여야 합니다.")
+                ranks.append((facility, rank))
+        except ValueError:
+            return HttpResponseBadRequest("순위는 숫자여야 합니다.")
 
-        facility_weights = dict(zip(selected_facilities, weights))
+        ranks.sort(key=lambda x: x[1])
+
+        # 순위에 반비례하여 가중치 할당
+        weights = np.array([1 / rank for facility, rank in ranks])
+
+        # 가중치 정규화
+        weights /= np.sum(weights)
+
+        facility_weights = dict(zip([facility for facility, rank in ranks], weights))
+
+        # 추천 사무실 로직
         recommended_offices = recommend_offices(selected_facilities, facility_weights)
-        return render(request, 'recommendation.html', {'offices': recommended_offices, 'user_selected_facilities': selected_facilities})
+
+        return render(request, 'recommendation.html',
+                      {'offices': recommended_offices, 'user_selected_facilities': selected_facilities})
 
     return render(request, 'choose.html')
 
@@ -352,3 +372,13 @@ def delete_reservation(request, id):
 
     return render(request, 'delete_confirm.html', {'reservation':reservation})
 
+def delete_customer(request):
+    customer_email = request.session.get('cus_email')
+    customer = Customer.objects.get(cus_email=customer_email)
+
+    if request.method == 'POST':
+        customer.delete()
+        messages.success(request, '회원 탈퇴가 완료되었습니다.')
+        return redirect('login')  # 회원 탈퇴 후 메인 페이지로 리디렉션
+
+    return render(request, 'cus_delete_confirm.html')

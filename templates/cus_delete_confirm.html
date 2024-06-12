@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    <h2>Are you sure you want to leave the membership ?</h2>
+    <button class="btn btn-default" type="submit">Yes</button>
+    <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>
+</form>
+
+</body>
+</html>

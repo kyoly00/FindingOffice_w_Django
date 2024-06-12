@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('mypage/', views.my_page, name='mypage'),
     path('update_customer/', views.update_customer, name='update_customer'),
+    path('delete_customer/', views.delete_customer, name='delete_customer'),
     path('location/', views.location_view, name='location'),
     path('choose/', views.choose, name='choose'),
     path('calculate_weights/', views.calculate_weights_view, name='calculate_weights'),

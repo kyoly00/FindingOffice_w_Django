@@ -1,55 +1,7 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE HTML>
-<!--
-	ZeroFour by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>FindingOffice-recommend optimal share office</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-	</head>
-	<body class="homepage is-preload">
-		<div id="page-wrapper">
-
-			<!-- Header -->
-				<div id="header-wrapper">
-					<div class="container">
-
-						<!-- Header -->
-							<header id="header">
-                                <div class="inner">
-                                    <!-- Logo -->
-                                    <h1><a href="{% url 'index' %}" id="logo">FindingOffice</a></h1>
-
-                                    <!-- Nav -->
-                                    <nav id="nav">
-                                        <ul>
-                                            <li class="current_page_item"><a href="{% url 'index' %}">Home</a></li>
-                                            <li>
-                                                <a href="#">Reservation</a>
-                                                <ul>
-                                                    <li><a href="{% url 'alone' %}">Alone</a></li>
-                                                    <li><a href="{% url 'together' %}">With Colleagues</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
-                                            <li><a href="{% url 'mypage' %}">My Page</a></li>
-                                            <!-- 로그인 상태에 따라 링크 변경 -->
-                                            {% if request.session.customer_email %}
-                                                <li><a href="{% url 'logout' %}">Log out</a></li>
-                                            {% else %}
-                                                <li><a href="{% url 'login' %}">Login & Register</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </header>
-
+{% block content %}
+    {% load static %}
 						<!-- Banner -->
 							<div id="banner">
 								<h2><strong>FINDING OFFICE:</strong> <br>RESERVE YOUR OWN SHARE OFFICE!
@@ -72,8 +24,7 @@
 									<div class="row">
 										<div class="col-12">
 											<header class="first major">
-												<h2>This is an important heading</h2>
-												<p>And this is where we talk about why we’re <strong>pretty awesome</strong> ...</p>
+												<h2>The features of our website are</h2>
 											</header>
 										</div>
 										<div class="col-4 col-12-medium">
@@ -84,21 +35,21 @@
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
                                                 {% endif %}
 												<header class="second icon solid fa-calendar-check">
-													<h3>Here's a Heading</h3>
-													<p>And a subtitle</p>
+													<h3>Share Office Reservation</h3>
+                                                    <p>with colleagues</p>
 												</header>
 											</section>
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
 												{% if user.is_authenticated %}
-                                                    <a href="{% url 'alone' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
+                                                    <a href="{% url 'together' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
                                                 {% else %}
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
                                                 {% endif %}
                                                 <header class="second icon solid fa-search-location">
-													<h3>Also a Heading</h3>
-													<p>And another subtitle</p>
+													<h3>Share Office Reservation</h3>
+                                                    <p>alone</p>
 												</header>
 											</section>
 										</div>
@@ -110,16 +61,9 @@
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
                                                 {% endif %}
                                                 <header class="second icon solid fa-user">
-													<h3>Another Heading</h3>
-													<p>And yes, a subtitle</p>
+													<h3>My Page</h3>
 												</header>
 											</section>
-										</div>
-										<div class="col-12">
-											<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus. Praesent semper
-											bibendum ipsum, et tristique augue fringilla eu. Vivamus id risus vel dolor auctor euismod
-											quis eget mi. Etiam eu ante risus. Aliquam erat volutpat. Aliquam luctus mattis lectus sit
-											amet pulvinar. Nam nec turpis.</p>
 										</div>
 									</div>
 								</section>
@@ -217,125 +161,27 @@
 
 											</section>
 									</div>
-									<div class="col-4 col-12-medium">
+                                    <div class="col-4 col-12-medium">
+                        <section class="box spotlight">
+                            <h2 class="icon fa-file-alt">Our Company</h2>
+                            <article>
+                                <a href="#" class="image featured"><img src="{% static 'images/logo.png' %}" alt=""></a>
+                                <header>
+                                    <h3><a href="#">FlexiNest</a></h3>
+                                    <p>Welcome to Your Ideal Workspace Solution!</p>
+                                </header>
+                                <p>At FlexiNest, we understand that the perfect workspace is crucial for productivity and success. That's why we offer a curated selection of coworking spaces based on prime locations and top-notch amenities. Whether you're a freelancer, a startup, or a large corporation, our platform provides you with the flexibility to find and book the ideal office space that meets your unique needs.</p>
 
-										<!-- Spotlight -->
-											<section class="box spotlight">
-												<h2 class="icon fa-file-alt">Our Company</h2>
-												<article>
-													<a href="#" class="image featured"><img src="{% static 'images/logo.png' %}" alt=""></a>
-													<header>
-														<h3><a href="#">FlexiNest</a></h3>
-														<p>For Your Work Flexibility and Convenience</p>
-													</header>
-													<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus semper mod
-													quisturpis nisi consequat ornare in, hendrerit in lectus semper mod quis eget mi quat etiam
-													lorem. Phasellus quam turpis, feugiat sed et lorem ipsum dolor consequat dolor feugiat sed
-													et tempus consequat etiam.</p>
-													<p>Lorem ipsum dolor quam turpis, feugiat sit amet ornare in, hendrerit in lectus semper
-													mod quisturpis nisi consequat etiam lorem sed amet quam turpis.</p>
-													<footer>
-														<a href="#" class="button alt icon solid fa-file-alt">Continue Reading</a>
-													</footer>
-												</article>
-											</section>
+                                <p>Our services include:</p>
 
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			<!-- Footer Wrapper -->
-				<div id="footer-wrapper">
-					<footer id="footer" class="container">
-						<div class="row">
-							<div class="col-3 col-6-medium col-12-small">
-
-								<!-- Links -->
-									<section>
-										<h2>Filler Links</h2>
-										<ul class="divided">
-											<li><a href="#">Quam turpis feugiat dolor</a></li>
-											<li><a href="#">Amet ornare in hendrerit </a></li>
-											<li><a href="#">Semper mod quisturpis nisi</a></li>
-											<li><a href="#">Consequat etiam phasellus</a></li>
-											<li><a href="#">Amet turpis, feugiat et</a></li>
-											<li><a href="#">Ornare hendrerit lectus</a></li>
-											<li><a href="#">Semper mod quis et dolore</a></li>
-											<li><a href="#">Amet ornare in hendrerit</a></li>
-											<li><a href="#">Consequat lorem phasellus</a></li>
-											<li><a href="#">Amet turpis, feugiat amet</a></li>
-											<li><a href="#">Semper mod quisturpis</a></li>
-										</ul>
-									</section>
-
-							</div>
-							<div class="col-6 col-12-medium imp-medium">
-
-								<!-- Links -->
-									<section>
-										<h2>Get in touch</h2>
-										<div>
-											<div class="row">
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Twitter</dt>
-														<dd><a href="#">@FindingOffice-corp</a></dd>
-														<dt>Facebook</dt>
-														<dd><a href="#">facebook.com/finding_office</a></dd>
-														<dt>WWW</dt>
-														<dd><a href="#">findingoffice.tld</a></dd>
-														<dt>Email</dt>
-														<dd><a href="#">findingoffice@gmail.com</a></dd>
-													</dl>
-												</div>
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Address</dt>
-														<dd>
-															1234 Fictional Rd<br />
-															Nashville, TN 00000-0000<br />
-															USA
-														</dd>
-														<dt>Phone</dt>
-														<dd>(02) 885-1234</dd>
-													</dl>
-												</div>
-											</div>
-										</div>
-									</section>
+                                <p>1. Prime Locations: Choose from a variety of premium locations that are easily accessible and in vibrant neighborhoods.</p>
+                                <p>2. Top-Notch Amenities: From high-speed internet and modern meeting rooms to comfortable lounge areas and fully stocked kitchens, our coworking spaces are equipped with everything you need to thrive.</p>
+                                <p>3. Easy Booking: Our user-friendly platform allows you to quickly search, compare, and reserve the perfect workspace in just a few clicks.</p>
+                            </article>
+                        </section>
+                                </div>
                             </div>
-
-
-
-
-
-								<!-- Contact -->
-
-
-							</div>
-							<div class="col-12">
-								<div id="copyright">
-									<ul class="menu">
-										<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</footer>
-				</div>
-
-		</div>
-
-		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
-			<script src="{% static 'js/browser.min.js' %}"></script>
-			<script src="{% static 'js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'js/util.js' %}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
-
-	</body>
-</html>
+                        </div>
+                    </div>
+                </div>
+{% endblock %}
