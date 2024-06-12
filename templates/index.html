@@ -29,7 +29,7 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-                                                {% if user.is_authenticated %}
+                                                {% if request.session.cus_email %}
                                                     <a href="{% url 'together' %}" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
                                                 {% else %}
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
@@ -42,7 +42,7 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-												{% if user.is_authenticated %}
+												{% if request.session.cus_email %}
                                                     <a href="{% url 'together' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
                                                 {% else %}
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
@@ -55,7 +55,7 @@
 										</div>
 										<div class="col-4 col-12-medium">
 											<section>
-												{% if user.is_authenticated %}
+												{% if request.session.cus_email %}
                                                     <a href="{% url 'mypage' %}" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
                                                 {% else %}
                                                     <a href="{% url 'login' %}" class="image featured"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
@@ -125,7 +125,7 @@
 														<a href="#" class="image left"><img src="{% static 'images/pic01.png' %}" alt="" /></a>
 														<div>
 															<header>
-																<h3><a href="#">RESERVE WITH COLLEAGUES</a></h3>
+																<h3>RESERVE WITH COLLEAGUES</h3>
 															</header>
 															<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus
 															semper mod quisturpis nisi consequat etiam lorem. Phasellus quam turpis,
@@ -138,7 +138,7 @@
 														<a href="#" class="image left"><img src="{% static 'images/pic02.png' %}" alt="" /></a>
 														<div>
 															<header>
-																<h3><a href="#">RESERVE ALONE</a></h3>
+																<h3>RESERVE ALONE</h3>
 															</header>
 															<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus
 															semper mod quisturpis nisi consequat etiam lorem. Phasellus quam turpis,
@@ -151,7 +151,7 @@
 														<a href="#" class="image left"><img src="{% static 'images/pic03.png' %}" alt="" /></a>
 														<div>
 															<header>
-																<h3><a href="#">MY PAGE</a></h3>
+																<h3>MY PAGE</h3>
 															</header>
 															<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus
 															semper mod quisturpis nisi consequat etiam lorem. Phasellus quam turpis,
@@ -184,4 +184,5 @@
                         </div>
                     </div>
                 </div>
+            </div>
 {% endblock %}
