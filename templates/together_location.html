@@ -11,7 +11,7 @@
 <body>
     <h1>주소 입력하기</h1>
 
-   <form action="{% url 'finding_together' %}" method="POST" id="reservationForm">
+   <form action="{% url 'together_location' %}" method="POST" id="reservationForm">
         {% csrf_token %}
         <div id="addressInputs" class="form-group">
             <div class="address-group">

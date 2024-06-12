@@ -82,31 +82,30 @@
 									  </header>
                                     </div>
                                  </div>
-                                  <table class="modern-table">
-									<thead>
-                                        <tr>
-                                            <th>Rank</th>
-                                            <th>Name</th>
-                                            <th>Address</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for office in top_offices %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ office.name }}</td>
-                                            <td>{{ office.address }}</td>
+                                  {% if top_offices %}
+                                      <table class="modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for office in top_offices %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ office.name }}</td>
+                                                <td>{{ office.address }}</td>
+                                            </tr>
 
-
-                                        </tr>
-                                        {% empty %}
-                                        <tr>
-                                            <td colspan="4">No data available</td>
-                                        </tr>
-                                        {% endfor %}
-									</tbody>
-                                  </table>
-                                </section>
+                                             {% endfor %}
+                                        </tbody>
+                                      </table>
+                                  {% else %}
+                                      <p>현재 순위 데이터를 불러오는 중입니다.</p>
+                                  {% endif %}
+                              </section>
 						</div>
 					 </div>
 

@@ -87,9 +87,3 @@ class Reservation(models.Model):
     re_end_time = models.DateTimeField()
     re_cancel = models.BooleanField(default=False)
     re_cancel_date = models.DateTimeField(null=True, blank=True, default=None)
-
-class Location(models.Model):
-    cus_email = models.ForeignKey(Customer, on_delete=models.CASCADE, db_column='cus_email', default='default_email@example.com')
-    lo_latitude = models.FloatField(max_length=30)
-    lo_longitude = models.FloatField(max_length=30)
-

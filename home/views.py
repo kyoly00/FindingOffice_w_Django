@@ -34,7 +34,7 @@ google_map_api_key = os.getenv('GOOGLE_MAP_API_KEY')
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return ranking(request)
 
 def alone(request):
     return render(request, 'reservation.html')
@@ -256,7 +256,7 @@ def address_to_lat_lng(addresses, people_counts):
     if len(people_counts) == 1: return latitude, longitude
     else: return all_latitude, all_longitude
 
-def finding_together(request):
+def together_location(request):
     addresses = []
     people_counts = []
     people_num = 0
@@ -295,7 +295,7 @@ def finding_together(request):
         # recommend_offices 함수로 리디렉션
         return redirect('choose')
 
-    return render(request, 'location.html')
+    return render(request, 'together_location.html')
 
 def alone_location(request):
     try:
@@ -369,7 +369,7 @@ def enterinfo(request):
             reservation = form.save(commit=False)
             reservation.so_id = selected_office
             reservation.cus_email = customer  # ForeignKey로 연결된 Customer 객체 저장
-            reservation.re_people = request.session.get('all_people_num')
+            reservation.re_people_num = request.session.get('all_people_num')
             reservation.save()
 
             messages.success(request, '예약이 완료되었습니다.')  # 예약 성공 메시지 추가
@@ -537,7 +537,7 @@ def choose_func(request):
                 return redirect('choose_func')
 
         elif finding_option == 'together_finding':
-            return redirect('finding_together')
+            return redirect('together_location')
 
         elif finding_option == 'location_finding':
             return redirect('alone_location')
