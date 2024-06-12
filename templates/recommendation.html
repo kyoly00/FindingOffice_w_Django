@@ -10,7 +10,7 @@
 </head>
 <body>
     <h1>Recommended Offices</h1>
-    <form action="{% url 'enterinfo' %}" method="post">
+    <form action="{% url 'recommendation' %}" method="POST">
         {% csrf_token %}
         <table class="table-striped">
             <thead>
@@ -26,14 +26,16 @@
             <tbody>
                 {% for office in offices %}
                     <tr>
-                        <td><input type="checkbox" name="selected" value="{{ office.id }}"></td>
+                        <td><input type="radio" name="selected" value="{{ office.id }}" required></td>
                         <td>{{ office.so_name }}</td>
                         <td>{{ office.so_address }}</td>
                         <td>{{ office.so_price }}</td>
                         <td>{{ office.so_max_people }}</td>
                         <td>
-                            {% for facility in office.facilities.all %}
-                                {{ facility.name }}{% if not forloop.last %}, {% endif %}
+                            {% for facility in user_selected_facilities %}
+                                {% if facility in office.facilities %}
+                                    {{ facility }}{% if not forloop.last %}, {% endif %}
+                                {% endif %}
                             {% endfor %}
                         </td>
                     </tr>

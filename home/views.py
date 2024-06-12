@@ -7,12 +7,14 @@ from django.db.models import Count
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpRequest
+from .forms import ReservationForm
 
 from urllib import parse
 from urllib.request import urlopen, Request as URLRequest
 from urllib.parse import urlencode
 from urllib.error import HTTPError
 import pprint
+import math
 
 import json
 import numpy as np
@@ -44,10 +46,14 @@ def login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
+                user = authenticate(request, username=email, password=password)
+                if user is not None:
+                    login(request, user)  # 로그인
+                    request.session['cus_email'] = email # 세션에 사용자 이메일 저장
                 customer = Customer.objects.get(cus_email=email)
                 if check_password(password, customer.cus_password):
                     # 로그인 성공 (세션에 사용자 정보 저장)
-                    request.session['customer_email'] = customer.cus_email
+                    request.session['cus_email'] = email
                     return redirect('index')  # 로그인 성공 후 리디렉션
                 else:
                     messages.error(request, 'Invalid password.')
@@ -154,6 +160,49 @@ def finding_optimal(latitudes, longitudes):
         sorted_so_ids = sorted(total_travel_times, key=total_travel_times.get)[:10]
         return sorted_so_ids
 
+def address_to_lat_lng(addresses, people_counts):
+    all_latitude = []
+    all_longitude = []
+
+    for i in range(len(addresses)):
+        address = addresses[i]
+        api_url = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query='
+        add_urlenc = parse.quote(address)  # URL Encoding
+        url = api_url + add_urlenc
+
+        loc_request = URLRequest(url)
+        loc_request.add_header('X-NCP-APIGW-API-KEY-ID', Client_ID)
+        loc_request.add_header('X-NCP-APIGW-API-KEY', Client_KEY)
+
+        try:
+            response = urlopen(loc_request)
+
+        except HTTPError as e:
+            print('HTTP Error')
+            latitude, longitude = None, None
+
+        else:
+            rescode = response.getcode()
+
+            if rescode == 200:
+                response_body = response.read().decode('utf-8')
+                response_body = json.loads(response_body)
+
+                if not response_body['addresses']:
+                    print('No result')
+                else:
+                    latitude = response_body['addresses'][0]['y']
+                    longitude = response_body['addresses'][0]['x']
+                    for j in range(people_counts[i]):
+                        all_latitude.append(latitude)
+                        all_longitude.append(longitude)
+            else:
+                print(f'Response error, rescode:{rescode}')
+                latitude, longitude = None, None
+
+    return all_latitude, all_longitude
+
+
 def location_view(request):
     addresses = []
     people_counts = []
@@ -176,44 +225,7 @@ def location_view(request):
 
             count += 1
 
-        all_latitude = []
-        all_longitude = []
-
-        for i in range(len(addresses)):
-            address = addresses[i]
-            api_url = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query='
-            add_urlenc = parse.quote(address)  # URL Encoding
-            url = api_url + add_urlenc
-
-            loc_request = URLRequest(url)
-            loc_request.add_header('X-NCP-APIGW-API-KEY-ID', Client_ID)
-            loc_request.add_header('X-NCP-APIGW-API-KEY', Client_KEY)
-
-            try:
-                response = urlopen(loc_request)
-
-            except HTTPError as e:
-                print('HTTP Error')
-                latitude, longitude = None, None
-
-            else:
-                rescode = response.getcode()
-
-                if rescode == 200:
-                    response_body = response.read().decode('utf-8')
-                    response_body = json.loads(response_body)
-
-                    if not response_body['addresses']:
-                        print('No result')
-                    else:
-                        latitude = response_body['addresses'][0]['y']
-                        longitude = response_body['addresses'][0]['x']
-                        for j in range(people_counts[i]):
-                            all_latitude.append(latitude)
-                            all_longitude.append(longitude)
-                else:
-                    print(f'Response error, rescode:{rescode}')
-                    latitude, longitude = None, None
+        all_latitude, all_longitude = address_to_lat_lng(addresses, people_counts)
 
         # 데이터가 비어 있지 않을 때만 최적 위치를 찾기
         if all_latitude and all_longitude:
@@ -234,20 +246,82 @@ def alone_location(request):
     return render(request, 'alone_location.html')
 
 def recommendation(request):
-    return render(request, 'recommendation.html')
+    if request.method == 'POST':
+        selected_ids_str = request.POST.get('selected')
+        selected_ids = int(selected_ids_str)
+        print(selected_ids)
+        request.session['selected_office_ids'] = selected_ids  # 선택한 오피스 ID를 세션에 저장
+        selected_offices = ShareOffice.objects.filter(id=selected_ids)
+
+        selected_data = [(office.id, office.so_name, office.so_address) for office in selected_offices]
+
+        print(f"Selected office IDs: {selected_ids}")
+
+        return render(request, 'enterinfo.html', {'selected_data': selected_data, 'form': ReservationForm()})
+
+    return redirect('recommendation')
 
 def enterinfo(request):
-    if request.method == 'POST':
-        selected_items = request.POST.getlist('selected')
-        # selected_items 예시: ['John Doe, 30', 'Jane Smith, 25']c
+    selected_office_ids = request.session.get('selected_office_ids')
+    if not selected_office_ids:
+        messages.error(request, 'No office selected.')
+        return redirect('recommendation')
 
-        # 데이터를 분리하여 context로 넘깁니다.
-        selected_data = [item.split(', ') for item in selected_items]
-        context = {
-            'selected_data': selected_data,
-        }
-        return render(request, 'enterinfo.html', context)
-    return render(request, 'recommendation.html')
+    selected_offices = ShareOffice.objects.filter(id=selected_office_ids)
+    selected_data = [(office.id, office.so_name, office.so_address) for office in selected_offices]
+
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        print(f"POST data: {request.POST}")  # 디버깅용 출력
+        if form.is_valid():
+            selected_office_id = request.POST.get('office_ids')
+            try:
+                selected_office = ShareOffice.objects.get(id=selected_office_id)
+            except ShareOffice.DoesNotExist:
+                messages.error(request, f"Office with ID {selected_office_id} does not exist.")
+                return redirect('enterinfo')
+
+            cus_email = request.session.get('cus_email')
+
+            try:
+                customer = Customer.objects.get(cus_email=cus_email)
+                if customer:
+                    print(customer)
+                else:
+                    print('not found customer')
+            except Customer.DoesNotExist:
+                messages.error(request, 'Customer does not exist.')
+                return redirect('enterinfo')
+
+            # 예약 데이터베이스에 저장
+            reservation = form.save(commit=False)
+            print(reservation)
+            reservation.so_id = selected_office
+            reservation.cus_email = customer  # ForeignKey로 연결된 Customer 객체 저장
+            reservation.save()
+
+            messages.success(request, '예약이 완료되었습니다.')  # 예약 성공 메시지 추가
+            return redirect('index')  # 예약 완료 후 리디렉션
+        else:
+            print(form.errors)
+            messages.error(request, '유효하지 않은 입력입니다.')
+
+    else:
+        form = ReservationForm(initial={'office_ids': selected_office_ids})
+
+    return render(request, 'enterinfo.html', {'form': form, 'selected_data': selected_data})
+
+@login_required
+def reservation_list(request):
+    cus_email = request.session.get('cus_email')
+    if cus_email:
+        reservations = Reservation.objects.filter(cus_email__cus_email=cus_email).select_related('so_id')
+    else:
+        reservations = []
+    context = {
+        'reservations': reservations
+    }
+    return render(request, 'check_reservation.html', context)
 
 def sign_up(request):
     if request.method == 'POST':
@@ -320,10 +394,6 @@ def reservation_list(request):
     }
     return render(request, 'check_reservation.html', context)
 
-# def customer_info(request, customer_id):
-#     customer = get_object_or_404(Customer, id=customer_id)
-#     return render(request, 'mypage.html', {'customer': customer})
-
 def ranking(request):
     top_offices = (Reservation.objects.values('so_id')
                    .annotate(count=Count('so_id'))
@@ -343,6 +413,71 @@ def ranking(request):
 
     return render(request, 'index.html',{'top_offices':top_office_details})
 
+def finding_alone(latitude, longitude, finding_range):
+    latitudes = []
+    longitudes = []
+
+    latitude = float(latitude)
+    longitude = float(longitude)
+    latitude_change = finding_range / 111.0
+    longitude_change = finding_range / (111.0 * math.cos(math.radians(latitude)))
+
+    latitudes.append(latitude + latitude_change)
+    latitudes.append(latitude - latitude_change)
+    longitudes.append(longitude + longitude_change)
+    longitudes.append(longitude - longitude_change)
+
+    location_dicts = get_addresses_in_range(latitudes, longitudes)
+
+    # 이동 시간을 저장할 딕셔너리 초기화
+    travel_times = {i: [] for i in range(1, len(location_dicts) + 1)}
+
+    # 각 위치 쌍에 대해 Google Maps Directions API를 호출하여 이동 시간 계산
+    for i in range(len(latitudes)):
+        for j, loc in enumerate(location_dicts):
+            so_lat = loc['so_lat']
+            so_lng = loc['so_lng']
+
+            # URL 파라미터 인코딩
+            params = {
+                'origin': f"{latitude},{longitude}",
+                'destination': f"{so_lat},{so_lng}",
+                'mode': 'transit',
+                'transit_routing_preference': 'fewer_transfers',
+                'key': google_map_api_key
+            }
+            endpoint = "https://maps.googleapis.com/maps/api/directions/json?"
+            url = endpoint + urlencode(params)
+
+            response = urlopen(url).read()
+            response_json = json.loads(response)
+
+            # 이동 시간 추출
+            if response_json["status"] == "OK":
+                travel_time_seconds = response_json["routes"][0]["legs"][0]["duration"]["value"]
+                # 각 이동 시간에 대한 정보를 딕셔너리에 저장
+                travel_times[j + 1].append({
+                    "so_id": loc['so_id'],  # 목적지 id
+                    "travel_time_seconds": travel_time_seconds  # 이동 시간 (초)
+                })
+            else:
+                print("Error:", response_json["status"])
+                print("URL:", url)  # 오류가 발생한 URL 출력
+                print("Response:", response_json)  # 응답 출력
+
+        # 목적지별 총 이동 시간을 계산
+        total_travel_times = {loc['so_id']: 0 for loc in location_dicts}
+
+        for i in travel_times:
+            for time_info in travel_times[i]:
+                so_id = time_info['so_id']
+                travel_time_seconds = time_info['travel_time_seconds']
+                total_travel_times[so_id] += travel_time_seconds
+
+        # 총 이동 시간이 작은 10개의 so_id를 반환
+        sorted_so_ids = sorted(total_travel_times, key=total_travel_times.get)[:10]
+        return sorted_so_ids
+
 def choose_func(request):
     if request.method == 'POST':
         finding_option = request.POST.get('finding_option')
@@ -352,7 +487,11 @@ def choose_func(request):
                 customer = Customer.objects.get(cus_email=request.user.email)
                 cus_latitude = customer.cus_latitude
                 cus_longitude = customer.cus_lognitude
-                return redirect('choose')  # 적절한 뷰로 리다이렉트
+
+                finding_range = 30
+
+
+                return redirect('choose')
             except Customer.DoesNotExist:
                 messages.error(request, 'Customer not found.')
                 return redirect('choose_func')
@@ -370,7 +509,7 @@ def choose(request):
         request.session['selected_facilities'] = selected_facilities  # 세션에 저장
         return render(request, 'enter_weights.html', {'selected_facilities': selected_facilities})
 
-def recommend_offices(offices, selected_facilities, weights):
+def recommend_offices(request, selected_facilities, weights):
     facility_mapping = {
         'ac': 'so_ac',
         'cafe': 'so_cafe',
@@ -394,6 +533,8 @@ def recommend_offices(offices, selected_facilities, weights):
         'bath_fclty': 'so_bath_fclty'
     }
 
+    office_ids = request.session.get('offices', [])
+    offices = ShareOffice.objects.filter(id__in=office_ids)
     scores = []
 
     for office in offices:
@@ -426,9 +567,6 @@ def calculate_weights(matrix):
     return weights
 
 def calculate_weights_view(request):
-    office_ids = request.session.get('offices', [])
-    offices = ShareOffice.objects.filter(id__in=office_ids)
-
     if request.method == 'POST':
         selected_facilities = request.session.get('selected_facilities', [])
         num_facilities = len(selected_facilities)
@@ -452,7 +590,7 @@ def calculate_weights_view(request):
             return render(request, 'error.html', {'error_message': str(e)})
 
         facility_weights = dict(zip(selected_facilities, weights))
-        recommended_offices = recommend_offices(offices, selected_facilities, facility_weights)
+        recommended_offices = recommend_offices(request, selected_facilities, facility_weights)
         return render(request, 'recommendation.html', {'offices': recommended_offices, 'user_selected_facilities': selected_facilities})
 
     return render(request, 'choose.html')
