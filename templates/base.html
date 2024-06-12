@@ -29,7 +29,7 @@
                                             <li><a href="{% url 'ranking' %}#ranking">Ranking</a></li>
                                             <li><a href="{% url 'mypage' %}">My Page</a></li>
                                             <!-- 로그인 상태에 따라 링크 변경 -->
-                                            {% if request.session.customer_email %}
+                                            {% if request.session.cus_email %}
                                                 <li><a href="{% url 'logout' %}">Log out</a></li>
                                             {% else %}
                                                 <li><a href="{% url 'login' %}">Login & Register</a></li>

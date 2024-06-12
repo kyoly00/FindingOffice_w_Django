@@ -37,3 +37,4 @@ class CustomerUpdateForm(forms.ModelForm):
         fields = ['cus_password', 'cus_name', 'cus_phone', 'cus_address']
         widgets = {
             'cus_password': forms.PasswordInput(),
+        }

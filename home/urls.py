@@ -10,6 +10,7 @@ urlpatterns = [
     path('mypage/', views.my_page, name='mypage'),
     path('finding_together/', views.finding_together, name='finding_together'),
     path('update_customer/', views.update_customer, name='update_customer'),
+    path('delete_customer/', views.delete_customer, name='delete_customer'),
     path('choose/', views.choose, name='choose'),
     path('calculate_weights/', views.calculate_weights_view, name='calculate_weights'),
     path('recommendation/', views.recommendation, name='recommendation'),

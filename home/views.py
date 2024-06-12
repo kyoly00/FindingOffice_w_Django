@@ -16,8 +16,8 @@ from urllib.error import HTTPError
 from django.http import HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 
-import pprint
 import math
+from time import timezone
 
 import json
 import numpy as np
@@ -74,24 +74,24 @@ def logout_view(request):
     return redirect('login')  # 로그아웃 후 로그인 페이지로 리디렉션
 
 def my_page(request):
-    customer_email = request.session.get('cus_email')
-    if not customer_email:
+    cus_email = request.session.get('cus_email')
+    if not cus_email:
         return redirect('login')  # 로그인되어 있지 않으면 로그인 페이지로 리디렉션
 
     try:
-        customer = Customer.objects.get(cus_email=customer_email)
+        customer = Customer.objects.get(cus_email=cus_email)
     except Customer.DoesNotExist:
         return redirect('login')  # 고객 정보가 없으면 로그인 페이지로 리디렉션
 
     return render(request, 'mypage.html', {'customer': customer})
 
 def update_customer(request):
-    customer_email = request.session.get('cus_email')
-    if not customer_email:
+    cus_email = request.session.get('cus_email')
+    if not cus_email:
         return redirect('login')
 
     try:
-        customer = Customer.objects.get(cus_email = customer_email)
+        customer = Customer.objects.get(cus_email = cus_email)
     except Customer.DoesNotExist:
         return redirect('login')
 
@@ -383,8 +383,6 @@ def enterinfo(request):
 
     return render(request, 'enterinfo.html', {'form': form, 'selected_data': selected_data})
 
-
-@login_required
 def reservation_list(request):
     cus_email = request.session.get('cus_email')
     if cus_email:
@@ -678,8 +676,8 @@ def delete_reservation(request, id):
     return render(request, 'delete_confirm.html', {'reservation':reservation})
 
 def delete_customer(request):
-    customer_email = request.session.get('cus_email')
-    customer = Customer.objects.get(cus_email=customer_email)
+    cus_email = request.session.get('cus_email')
+    customer = Customer.objects.get(cus_email=cus_email)
 
     if request.method == 'POST':
         customer.delete()
