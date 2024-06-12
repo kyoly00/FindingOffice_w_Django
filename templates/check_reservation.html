@@ -96,7 +96,11 @@
                                                     <td>{{ reservation.re_start_time }}</td>
                                                     <td>{{ reservation.re_end_time }}</td>
                                                     <td>
-                                                        <a class="button" href="{% url 'delete_reservation' reservation.id %}">취소</a>
+                                                        {% if reservation.re_cancel == 0 %}
+                                                            <a class="button" href="{% url 'delete_reservation' reservation.id %}">취소</a>
+                                                        {% else %}
+                                                            <p>취소된 예약</p>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
