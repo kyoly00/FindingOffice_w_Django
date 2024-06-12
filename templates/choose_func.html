@@ -9,12 +9,13 @@
       <link rel="stylesheet" href="{% static 'css/choose.css'%}"/>
     </head>
     <body>
-       <form id="findingForm" method="get">
-        <fieldset class="checkbox-group">
+        <form action="{% url 'choose_func' %}" id="findingForm" method="post">
+          {% csrf_token %}
+          <fieldset class="checkbox-group">
             <legend class="checkbox-group-legend">Choose your Finding</legend>
             <div class="checkbox">
               <label class="checkbox-wrapper">
-                <input type="checkbox" name="finding_option" value="choose" class="checkbox-input" />
+                <input type="checkbox" name="finding_option" value="near_finding" class="checkbox-input" />
                 <span class="checkbox-tile">
                   <span class="checkbox-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
@@ -28,7 +29,7 @@
 
             <div class="checkbox">
               <label class="checkbox-wrapper">
-                <input type="checkbox" name="finding_option" value="location" class="checkbox-input"/>
+                <input type="checkbox" name="finding_option" value="together_finding" class="checkbox-input" />
                 <span class="checkbox-tile">
                   <span class="checkbox-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-map" viewBox="0 0 16 16">
@@ -43,7 +44,7 @@
 
             <div class="checkbox">
               <label class="checkbox-wrapper">
-                <input type="checkbox" name="finding_option"  value="alone_location" class="checkbox-input" />
+                <input type="checkbox" name="finding_option" value="location_finding" class="checkbox-input" />
                 <span class="checkbox-tile">
                   <span class="checkbox-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
@@ -57,60 +58,53 @@
             </div>
             <button type="submit" class="button">Submit</button>
           </fieldset>
+        </form>
 
-      </form>
+        <!-- JavaScript를 사용하여 한 번에 하나의 체크박스만 선택되도록 만듭니다. -->
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            // 모든 체크박스를 선택합니다.
+            const checkboxes = document.querySelectorAll('.checkbox-input');
 
-      <!-- JavaScript를 사용하여 한 번에 하나의 체크박스만 선택되도록 만듭니다. -->
-      <script>
-        // 모든 체크박스를 선택합니다.
-        const checkboxes = document.querySelectorAll('.checkbox-input');
-        // 각 체크박스에 클릭 이벤트 리스너를 추가합니다.
-        checkboxes.forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
+            // 각 체크박스에 클릭 이벤트 리스너를 추가합니다.
+            checkboxes.forEach(function(checkbox) {
+              checkbox.addEventListener('change', function() {
                 // 현재 체크박스가 체크되어 있다면,
                 if (checkbox.checked) {
-                    // 다른 모든 체크박스의 체크를 해제합니다.
-                    checkboxes.forEach(function(otherCheckbox) {
-                        if (otherCheckbox !== checkbox) {
-                            otherCheckbox.checked = false;
-                        }
-                    });
+                  // 다른 모든 체크박스의 체크를 해제합니다.
+                  checkboxes.forEach(function(otherCheckbox) {
+                    if (otherCheckbox !== checkbox) {
+                      otherCheckbox.checked = false;
+                    }
+                  });
                 }
+              });
             });
-        });
 
-        // 폼의 submit 이벤트를 처리하여 action URL을 동적으로 설정합니다.
-        document.getElementById('findingForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 폼의 기본 제출 동작을 막습니다.
+            // 폼의 submit 이벤트를 처리하여 action URL을 동적으로 설정합니다.
+            document.getElementById('findingForm').addEventListener('submit', function(event) {
+              event.preventDefault(); // 폼의 기본 제출 동작을 막습니다.
 
-            // 선택된 체크박스의 값을 가져옵니다.
-            let selectedValue;
-             const checkboxes = document.querySelectorAll('.checkbox-input');
-            checkboxes.forEach(function(checkbox) {
+              // 선택된 체크박스의 값을 가져옵니다.
+              let selectedValue;
+              checkboxes.forEach(function(checkbox) {
                 if (checkbox.checked) {
-                    selectedValue = checkbox.value;
+                  selectedValue = checkbox.value;
                 }
+              });
+
+              // 선택된 값이 있는지 확인합니다.
+              if (selectedValue) {
+                // action을 설정하고 폼을 제출합니다.
+                this.action = "{% url 'choose_func' %}";
+                this.submit();
+              } else {
+                alert('하나의 옵션을 선택하세요.');
+              }
             });
+          });
+        </script>
 
-            // 폼의 action을 설정합니다.
-            let formAction;
-            if (selectedValue === 'choose') {
-                formAction = "{% url 'choose' %}";
-            } else if (selectedValue === 'location') {
-                formAction = "{% url 'location' %}";
-            } else if (selectedValue === 'alone_location') {
-                formAction = "{% url 'alone_location' %}";
-            }
-
-            // 폼의 action을 동적으로 설정하고 제출합니다.
-            if (formAction) {
-        document.getElementById('findingForm').action = formAction;
-        document.getElementById('findingForm').submit();
-        } else {
-            alert('하나의 옵션을 선택하세요.');
-        }
-        });
-    </script>
 
       </body>
 </html>
