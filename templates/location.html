@@ -11,12 +11,12 @@
 <body>
     <h1>주소 입력하기</h1>
 
-   <form action="{% url 'choose' %}" method="POST" id="reservationForm">
+   <form action="{% url 'finding_together' %}" method="POST" id="reservationForm">
         {% csrf_token %}
         <div id="addressInputs" class="form-group">
             <div class="address-group">
-                <input type="text" name="address" placeholder="주소" class="form-control" required />
-                <input type="number" name="people" placeholder="인원 수" class="form-control" min="1" required />
+                <input type="text" name="address1" placeholder="주소" class="form-control" required />
+                <input type="number" name="people1" placeholder="인원 수" class="form-control" min="1" required />
             </div>
         </div>
         <button type="button" id="addAddressButton">주소 추가</button>

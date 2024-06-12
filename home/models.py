@@ -82,6 +82,7 @@ class ShareOffice(models.Model):
 class Reservation(models.Model):
     cus_email = models.ForeignKey(Customer, on_delete=models.CASCADE, db_column='cus_email', default='default_email@example.com')
     so_id = models.ForeignKey(ShareOffice, on_delete=models.CASCADE)
+    re_people_num = models.IntegerField(default=0)
     re_start_time = models.DateTimeField()
     re_end_time = models.DateTimeField()
     re_cancel = models.BooleanField(default=False)

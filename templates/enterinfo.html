@@ -6,31 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약 페이지</title>
     <link rel="stylesheet" href="{% static 'css/enterinfo.css'%}">
+    <script src="{% static 'js/enterinfo.js' %}"></script>
+    <script>
+        // Django URL을 전역 변수로 설정
+        var redirectUrl = "{% url 'index' %}";
+    </script>
 </head>
-<body>
-    <div class="container">
-        <h1>예약 페이지</h1>
-        <form method="post" action="{% url 'enterinfo' %}">
-            {% csrf_token %}
-            {% for office in selected_data %}
-                <h3>Name</h3>
-                <b>{{ office.1 }}</b>
-                <h3>Address</h3>
-                <b>{{ office.2 }}</b>
-                <input type="hidden" name="office_ids" value="{{ office.0 }}">
-            {% endfor %}
-            <br>
-            {{ form.as_p }}
-            <div class="form-group">
-                <label for="payment-method">결제 방식</label>
-                <select id="payment-method" name="payment-method" required>
-                    <option value="" disabled selected>선택하세요</option>
-                    <option value="credit">신용카드</option>
-                    <option value="paypal">현장결제</option>
-                </select>
-            </div>
-            <button type="submit" >예약</button>
-        </form>
-    </div>
-</body>
+    <body>
+        <div class="container">
+            <h1>예약 페이지</h1>
+            <form method="post" action="{% url 'enterinfo' %}">
+                {% csrf_token %}
+                {% for office in selected_data %}
+                    <h3>Name</h3>
+                    <b>{{ office.1 }}</b>
+                    <h3>Address</h3>
+                    <b>{{ office.2 }}</b>
+                    <input type="hidden" name="office_ids" value="{{ office.0 }}">
+                {% endfor %}
+
+                <p>office_ids 값: {{ request.POST.office_ids }}</p>
+                <br>
+                {{ form.as_p }}
+                <div class="form-group">
+                    <label for="payment-method">결제 방식</label>
+                    <select id="payment-method" name="payment-method" required>
+                        <option value="" disabled selected>선택하세요</option>
+                        <option value="credit">신용카드</option>
+                        <option value="paypal">현장결제</option>
+                    </select>
+                </div>
+                <button type="submit" >예약</button>
+            </form>
+        </div>
+    </body>
 </html>
