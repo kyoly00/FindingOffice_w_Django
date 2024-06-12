@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.clickjacking import xframe_options_exempt
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, ReservationForm, CustomerUpdateForm
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
@@ -14,6 +14,7 @@ from urllib.request import Request
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 from django.http import HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
 import json
 import numpy as np
 from scipy.linalg import eig
@@ -34,10 +35,15 @@ def login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
+                user = authenticate(request, username=email, password=password)
+                if user is not None:
+                    login(request, user)  # 로그인
+                    request.session['cus_email'] = email # 세션에 사용자 이메일 저장
+
                 customer = Customer.objects.get(cus_email=email)
                 if check_password(password, customer.cus_password):
                     # 로그인 성공 (세션에 사용자 정보 저장)
-                    request.session['customer_email'] = customer.cus_email
+                    request.session['cus_email'] = email
                     return redirect('index')  # 로그인 성공 후 리디렉션
                 else:
                     messages.error(request, 'Invalid password.')
@@ -54,7 +60,7 @@ def logout_view(request):
     return redirect('login')  # 로그아웃 후 로그인 페이지로 리디렉션
 
 def my_page(request):
-    customer_email = request.session.get('customer_email')
+    customer_email = request.session.get('cus_email')
     if not customer_email:
         return redirect('login')  # 로그인되어 있지 않으면 로그인 페이지로 리디렉션
 
@@ -65,31 +71,112 @@ def my_page(request):
 
     return render(request, 'mypage.html', {'customer': customer})
 
+def update_customer(request):
+    customer_email = request.session.get('cus_email')
+    if not customer_email:
+        return redirect('login')
+
+    try:
+        customer = Customer.objects.get(cus_email = customer_email)
+    except Customer.DoesNotExist:
+        return redirect('login')
+
+    if request.method == 'POST':
+        form = CustomerUpdateForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '회원 정보가 성공적으로 수정되었습니다.')
+            return redirect('mypage')
+
+        else:
+            messages.error(request,'유효하지 않은 입력입니다.')
+    else:
+        form = CustomerUpdateForm(instance=customer)
+
+    return render(request, 'update_customer.html', {'form':form})
+
 def location_view(request):
     return render(request, 'location.html')
 
 def alone_location(request):
     return render(request, 'alone_location.html')
 
-
-# def recommendation(request):
-#     return render(request, 'recommendation.html')
-
 # views.py
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-from .models import ShareOffice
-
-@csrf_exempt
-def enterinfo(request):
+def recommendation(request):
     if request.method == 'POST':
-        selected_ids = request.POST.getlist('selected')
-        selected_offices = ShareOffice.objects.filter(id__in=selected_ids)
-        selected_data = [(office.so_name, office.so_address) for office in selected_offices]
+        selected_ids_str = request.POST.get('selected')
+        selected_ids = int(selected_ids_str)
+        print(selected_ids)
+        request.session['selected_office_ids'] = selected_ids  # 선택한 오피스 ID를 세션에 저장
+        selected_offices = ShareOffice.objects.filter(id=selected_ids)
 
-        return render(request, 'enterinfo.html', {'selected_data': selected_data})
+        selected_data = [(office.id, office.so_name, office.so_address) for office in selected_offices]
+
+        print(f"Selected office IDs: {selected_ids}")
+
+        return render(request, 'enterinfo.html', {'selected_data': selected_data, 'form': ReservationForm()})
 
     return redirect('recommendation')
+
+def enterinfo(request):
+    selected_office_ids = request.session.get('selected_office_ids')
+    if not selected_office_ids:
+        messages.error(request, 'No office selected.')
+        return redirect('recommendation')
+
+    selected_offices = ShareOffice.objects.filter(id=selected_office_ids)
+    selected_data = [(office.id, office.so_name, office.so_address) for office in selected_offices]
+
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        print(f"POST data: {request.POST}")  # 디버깅용 출력
+        if form.is_valid():
+            selected_office_id = request.POST.get('office_ids')
+            print(f"Selected office ID: {selected_office_id}")
+            try:
+                selected_office = ShareOffice.objects.get(id=selected_office_id)
+            except ShareOffice.DoesNotExist:
+                messages.error(request, f"Office with ID {selected_office_id} does not exist.")
+                return redirect('enterinfo')
+
+            cus_email = request.session.get('cus_email')
+            try:
+                customer = Customer.objects.get(cus_email=cus_email)
+            except Customer.DoesNotExist:
+                messages.error(request, 'Customer does not exist.')
+                return redirect('enterinfo')
+
+            # 예약 데이터베이스에 저장
+            reservation = form.save(commit=False)
+            reservation.so_id = selected_office
+            reservation.cus_email = customer  # ForeignKey로 연결된 Customer 객체 저장
+            reservation.save()
+
+            messages.success(request, '예약이 완료되었습니다.')  # 예약 성공 메시지 추가
+            return redirect('index')  # 예약 완료 후 리디렉션
+        else:
+            print(form.errors)
+            messages.error(request, '유효하지 않은 입력입니다.')
+
+    else:
+        form = ReservationForm(initial={'office_ids': selected_office_ids})
+
+    return render(request, 'enterinfo.html', {'form': form, 'selected_data': selected_data})
+
+
+@login_required
+def reservation_list(request):
+    cus_email = request.session.get('cus_email')
+    if cus_email:
+        reservations = Reservation.objects.filter(cus_email__cus_email=cus_email).select_related('so_id')
+    else:
+        reservations = []
+    context = {
+        'reservations': reservations
+    }
+    return render(request, 'check_reservation.html', context)
+
+
 def sign_up(request):
     if request.method == 'POST':
         cus_password = make_password(request.POST.get('cus_password'))
@@ -119,16 +206,8 @@ def sign_up(request):
 # def check_reservation(request):
 #     return render(request, 'check_reservation.html')
 
-def reservation_list(request):
-    reservations = Reservation.objects.select_related('cus_email', 'so_id')
-    context = {
-        'reservations': reservations
-    }
-    return render(request, 'check_reservation.html', context)
 
-# def customer_info(request, customer_id):
-#     customer = get_object_or_404(Customer, id=customer_id)
-#     return render(request, 'mypage.html', {'customer': customer})
+
 
 def ranking(request):
     top_offices = (Reservation.objects.values('so_id')
@@ -266,7 +345,10 @@ def delete_reservation(request, id):
     reservation = Reservation.objects.get(id=id)
 
     if request.method == "POST":
-        reservation.delete()
+        reservation.re_cancel = True
+        reservation.re_cancel_date = timezone.now()
+        reservation.save()
         return redirect('reservation_list')
 
     return render(request, 'delete_confirm.html', {'reservation':reservation})
+
